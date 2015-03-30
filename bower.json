@@ -1,0 +1,19 @@
+{
+  "name": "arjanfrans.github.io",
+  "version": "0.0.1",
+  "homepage": "arjanfrans.com",
+  "authors": [
+    "arjanfrans.com@gmail.com"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "devicons": "~1.7.0"
+  }
+}
