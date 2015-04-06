@@ -10,10 +10,9 @@
     <![endif]-->
 
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
 
-      <!-- inject:css -->
-        <!-- endinject -->
   </head>
 
   <body>
@@ -28,8 +27,10 @@
           </div>
 
           <nav>
-            <a href="{{ site.baseurl }}/">Blog</a>
+            <a href="{{ site.baseurl }}/posts">Posts</a>
+            <a href="{{ site.baseurl }}/projects">Projects</a>
             <a href="{{ site.baseurl }}/about">About</a>
+            <a href="https://github.com/ArjanFrans"><span class="fa fa-github fa-2x"></span></a>
           </nav>
         </header>
       </div>
@@ -43,6 +44,7 @@
       <div class="container">
         <footer class="footer">
           {% include svg-icons.html %}
+          <p>&copy {{ site.time | date: '%Y' }}</p>
         </footer>
       </div>
     </div>
