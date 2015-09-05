@@ -9,7 +9,7 @@ layout: default
     <span>{{ post.date | date: "%b %-d, %Y" }}</span>
 
     <h2>
-      <ahref="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+      <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
     </h2>
   </li>
 {% endfor %}
