@@ -1,0 +1,534 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="">
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# object: http://ogp.me/ns/object# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#">
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <meta name="viewport" content="width=1020">
+    
+    
+    <title>node-loggert/LICENSE at master · arjanfrans/node-loggert · GitHub</title>
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub">
+    <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-144.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144.png">
+    <meta property="fb:app_id" content="1401488693436528">
+
+      <meta content="@github" name="twitter:site" /><meta content="summary" name="twitter:card" /><meta content="arjanfrans/node-loggert" name="twitter:title" /><meta content="node-loggert - Easy and flexible logging in Node" name="twitter:description" /><meta content="https://avatars1.githubusercontent.com/u/3588470?v=3&amp;s=400" name="twitter:image:src" />
+      <meta content="GitHub" property="og:site_name" /><meta content="object" property="og:type" /><meta content="https://avatars1.githubusercontent.com/u/3588470?v=3&amp;s=400" property="og:image" /><meta content="arjanfrans/node-loggert" property="og:title" /><meta content="https://github.com/arjanfrans/node-loggert" property="og:url" /><meta content="node-loggert - Easy and flexible logging in Node" property="og:description" />
+      <meta name="browser-stats-url" content="https://api.github.com/_private/browser/stats">
+    <meta name="browser-errors-url" content="https://api.github.com/_private/browser/errors">
+    <link rel="assets" href="https://assets-cdn.github.com/">
+    
+    <meta name="pjax-timeout" content="1000">
+    
+
+    <meta name="msapplication-TileImage" content="/windows-tile.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="selected-link" value="repo_source" data-pjax-transient>
+
+    <meta name="google-site-verification" content="KT5gs8h0wvaagLKAVWq8bbeNwnZZK1r1XQysX3xurLU">
+        <meta name="google-analytics" content="UA-3769691-2">
+
+    <meta content="collector.githubapp.com" name="octolytics-host" /><meta content="collector-cdn.github.com" name="octolytics-script-host" /><meta content="github" name="octolytics-app-id" /><meta content="5ED412E6:4FA0:1AF5617:55EB2877" name="octolytics-dimension-request_id" />
+    
+    <meta content="Rails, view, blob#blame" data-pjax-transient="true" name="analytics-event" />
+    <meta class="js-ga-set" name="dimension1" content="Logged Out">
+      <meta class="js-ga-set" name="dimension4" content="Current repo nav">
+    <meta name="is-dotcom" content="true">
+        <meta name="hostname" content="github.com">
+    <meta name="user-login" content="">
+
+      <link rel="mask-icon" href="https://assets-cdn.github.com/pinned-octocat.svg" color="#4078c0">
+      <link rel="icon" type="image/x-icon" href="https://assets-cdn.github.com/favicon.ico">
+
+    <!-- </textarea> --><!-- '"` --><meta content="authenticity_token" name="csrf-param" />
+<meta content="59u6teJjKvl7LkarQjzOmSm8xMaoJnNMq/G6PTnB1UF6yMXmKAuySnONtHMoPlmL9OxTvj9unTm8OJhT5keFDQ==" name="csrf-token" />
+    
+
+    <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/github-20ef81825cb67c29f98949804b58cf91dbf3de37cb09ccaa59c93970272e0b35.css" media="all" rel="stylesheet" />
+    <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/github2-726d0810d308c486e226fbd3d4392b84987fddf613a311c76e816dbaf2461c38.css" media="all" rel="stylesheet" />
+    
+    
+
+
+    <meta http-equiv="x-pjax-version" content="e21519a1f589ffb51c1a9b6cfaa2bbfc">
+
+      
+  <meta name="description" content="node-loggert - Easy and flexible logging in Node">
+  <meta name="go-import" content="github.com/arjanfrans/node-loggert git https://github.com/arjanfrans/node-loggert.git">
+
+  <meta content="3588470" name="octolytics-dimension-user_id" /><meta content="arjanfrans" name="octolytics-dimension-user_login" /><meta content="41561622" name="octolytics-dimension-repository_id" /><meta content="arjanfrans/node-loggert" name="octolytics-dimension-repository_nwo" /><meta content="true" name="octolytics-dimension-repository_public" /><meta content="false" name="octolytics-dimension-repository_is_fork" /><meta content="41561622" name="octolytics-dimension-repository_network_root_id" /><meta content="arjanfrans/node-loggert" name="octolytics-dimension-repository_network_root_nwo" />
+  <link href="https://github.com/arjanfrans/node-loggert/commits/master.atom" rel="alternate" title="Recent Commits to node-loggert:master" type="application/atom+xml">
+
+  </head>
+
+
+  <body class="logged_out  env-production  vis-public">
+    <a href="#start-of-content" tabindex="1" class="accessibility-aid js-skip-to-content">Skip to content</a>
+
+    
+    
+    
+
+
+
+      
+      <div class="header header-logged-out" role="banner">
+  <div class="container clearfix">
+
+    <a class="header-logo-wordmark" href="https://github.com/" data-ga-click="(Logged out) Header, go to homepage, icon:logo-wordmark">
+      <span class="mega-octicon octicon-logo-github"></span>
+    </a>
+
+    <div class="header-actions" role="navigation">
+        <a class="btn btn-primary" href="/join" data-ga-click="(Logged out) Header, clicked Sign up, text:sign-up">Sign up</a>
+      <a class="btn" href="/login?return_to=%2Farjanfrans%2Fnode-loggert%2Fblame%2Fmaster%2FLICENSE" data-ga-click="(Logged out) Header, clicked Sign in, text:sign-in">Sign in</a>
+    </div>
+
+    <div class="site-search repo-scope js-site-search" role="search">
+      <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/arjanfrans/node-loggert/search" class="js-site-search-form" data-global-search-url="/search" data-repo-search-url="/arjanfrans/node-loggert/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+  <label class="js-chromeless-input-container form-control">
+    <div class="scope-badge">This repository</div>
+    <input type="text"
+      class="js-site-search-focus js-site-search-field is-clearable chromeless-input"
+      data-hotkey="s"
+      name="q"
+      placeholder="Search"
+      aria-label="Search this repository"
+      data-global-scope-placeholder="Search GitHub"
+      data-repo-scope-placeholder="Search"
+      tabindex="1"
+      autocapitalize="off">
+  </label>
+</form>
+    </div>
+
+      <ul class="header-nav left" role="navigation">
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="/explore" data-ga-click="(Logged out) Header, go to explore, text:explore">Explore</a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="/features" data-ga-click="(Logged out) Header, go to features, text:features">Features</a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="https://enterprise.github.com/" data-ga-click="(Logged out) Header, go to enterprise, text:enterprise">Enterprise</a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="/pricing" data-ga-click="(Logged out) Header, go to pricing, text:pricing">Pricing</a>
+          </li>
+      </ul>
+
+  </div>
+</div>
+
+
+
+    <div id="start-of-content" class="accessibility-aid"></div>
+
+    <div id="js-flash-container">
+</div>
+
+
+        <div itemscope itemtype="http://schema.org/WebPage">
+    <div class="pagehead repohead instapaper_ignore readability-menu">
+      <div class="container">
+
+        <div class="clearfix">
+          
+<ul class="pagehead-actions">
+
+  <li>
+      <a href="/login?return_to=%2Farjanfrans%2Fnode-loggert"
+    class="btn btn-sm btn-with-count tooltipped tooltipped-n"
+    aria-label="You must be signed in to watch a repository" rel="nofollow">
+    <span class="octicon octicon-eye"></span>
+    Watch
+  </a>
+  <a class="social-count" href="/arjanfrans/node-loggert/watchers">
+    1
+  </a>
+
+  </li>
+
+  <li>
+      <a href="/login?return_to=%2Farjanfrans%2Fnode-loggert"
+    class="btn btn-sm btn-with-count tooltipped tooltipped-n"
+    aria-label="You must be signed in to star a repository" rel="nofollow">
+    <span class="octicon octicon-star"></span>
+    Star
+  </a>
+
+    <a class="social-count js-social-count" href="/arjanfrans/node-loggert/stargazers">
+      0
+    </a>
+
+  </li>
+
+    <li>
+      <a href="/login?return_to=%2Farjanfrans%2Fnode-loggert"
+        class="btn btn-sm btn-with-count tooltipped tooltipped-n"
+        aria-label="You must be signed in to fork a repository" rel="nofollow">
+        <span class="octicon octicon-repo-forked"></span>
+        Fork
+      </a>
+      <a href="/arjanfrans/node-loggert/network" class="social-count">
+        0
+      </a>
+    </li>
+</ul>
+
+          <h1 itemscope itemtype="http://data-vocabulary.org/Breadcrumb" class="entry-title public ">
+  <span class="mega-octicon octicon-repo"></span>
+  <span class="author"><a href="/arjanfrans" class="url fn" itemprop="url" rel="author"><span itemprop="title">arjanfrans</span></a></span><!--
+--><span class="path-divider">/</span><!--
+--><strong><a href="/arjanfrans/node-loggert" data-pjax="#js-repo-pjax-container">node-loggert</a></strong>
+
+  <span class="page-context-loader">
+    <img alt="" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+  </span>
+
+</h1>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="repository-with-sidebar repo-container new-discussion-timeline ">
+        <div class="repository-sidebar clearfix">
+          
+<nav class="sunken-menu repo-nav js-repo-nav js-sidenav-container-pjax js-octicon-loaders"
+     role="navigation"
+     data-pjax="#js-repo-pjax-container"
+     data-issue-count-url="/arjanfrans/node-loggert/issues/counts">
+  <ul class="sunken-menu-group">
+    <li class="tooltipped tooltipped-w" aria-label="Code">
+      <a href="/arjanfrans/node-loggert" aria-label="Code" aria-selected="true" class="js-selected-navigation-item selected sunken-menu-item" data-hotkey="g c" data-selected-links="repo_source repo_downloads repo_commits repo_releases repo_tags repo_branches /arjanfrans/node-loggert">
+        <span class="octicon octicon-code"></span> <span class="full-word">Code</span>
+        <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>    </li>
+
+      <li class="tooltipped tooltipped-w" aria-label="Issues">
+        <a href="/arjanfrans/node-loggert/issues" aria-label="Issues" class="js-selected-navigation-item sunken-menu-item" data-hotkey="g i" data-selected-links="repo_issues repo_labels repo_milestones /arjanfrans/node-loggert/issues">
+          <span class="octicon octicon-issue-opened"></span> <span class="full-word">Issues</span>
+          <span class="js-issue-replace-counter"></span>
+          <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>      </li>
+
+    <li class="tooltipped tooltipped-w" aria-label="Pull requests">
+      <a href="/arjanfrans/node-loggert/pulls" aria-label="Pull requests" class="js-selected-navigation-item sunken-menu-item" data-hotkey="g p" data-selected-links="repo_pulls /arjanfrans/node-loggert/pulls">
+          <span class="octicon octicon-git-pull-request"></span> <span class="full-word">Pull requests</span>
+          <span class="js-pull-replace-counter"></span>
+          <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>    </li>
+
+  </ul>
+  <div class="sunken-menu-separator"></div>
+  <ul class="sunken-menu-group">
+
+    <li class="tooltipped tooltipped-w" aria-label="Pulse">
+      <a href="/arjanfrans/node-loggert/pulse" aria-label="Pulse" class="js-selected-navigation-item sunken-menu-item" data-selected-links="pulse /arjanfrans/node-loggert/pulse">
+        <span class="octicon octicon-pulse"></span> <span class="full-word">Pulse</span>
+        <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>    </li>
+
+    <li class="tooltipped tooltipped-w" aria-label="Graphs">
+      <a href="/arjanfrans/node-loggert/graphs" aria-label="Graphs" class="js-selected-navigation-item sunken-menu-item" data-selected-links="repo_graphs repo_contributors /arjanfrans/node-loggert/graphs">
+        <span class="octicon octicon-graph"></span> <span class="full-word">Graphs</span>
+        <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>    </li>
+  </ul>
+
+
+</nav>
+
+            <div class="only-with-full-nav">
+                
+<div class="js-clone-url clone-url open"
+  data-protocol-type="http">
+  <h3><span class="text-emphasized">HTTPS</span> clone URL</h3>
+  <div class="input-group js-zeroclipboard-container">
+    <input type="text" class="input-mini input-monospace js-url-field js-zeroclipboard-target"
+           value="https://github.com/arjanfrans/node-loggert.git" readonly="readonly" aria-label="HTTPS clone URL">
+    <span class="input-group-button">
+      <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span class="octicon octicon-clippy"></span></button>
+    </span>
+  </div>
+</div>
+
+  
+<div class="js-clone-url clone-url "
+  data-protocol-type="subversion">
+  <h3><span class="text-emphasized">Subversion</span> checkout URL</h3>
+  <div class="input-group js-zeroclipboard-container">
+    <input type="text" class="input-mini input-monospace js-url-field js-zeroclipboard-target"
+           value="https://github.com/arjanfrans/node-loggert" readonly="readonly" aria-label="Subversion checkout URL">
+    <span class="input-group-button">
+      <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span class="octicon octicon-clippy"></span></button>
+    </span>
+  </div>
+</div>
+
+
+
+  <div class="clone-options">You can clone with
+    <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/users/set_protocol?protocol_selector=http&amp;protocol_type=clone" class="inline-form js-clone-selector-form " data-form-nonce="8c74ad55ea1b9bdc4b8aa1757bbfca109b8f9379" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="/4fg/4/uaWt+Flja8i2KKAiI8d7Tsw0SWshFDyZ4vxX9iDbZhCvQ7+haKRCJAihuvoxqfqXPYH+rUVpBBOlDtg==" /></div><button class="btn-link js-clone-selector" data-protocol="http" type="submit">HTTPS</button></form> or <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/users/set_protocol?protocol_selector=subversion&amp;protocol_type=clone" class="inline-form js-clone-selector-form " data-form-nonce="8c74ad55ea1b9bdc4b8aa1757bbfca109b8f9379" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="k6pen6jp5SM691RJykd+jMW+XaqWJ5RCLdIhIzOJW3dHfTuaLI0GJNCDv1XdswQejS7Q1hPkz6WUVy3nhDJnUw==" /></div><button class="btn-link js-clone-selector" data-protocol="subversion" type="submit">Subversion</button></form>.
+    <a href="https://help.github.com/articles/which-remote-url-should-i-use" class="help tooltipped tooltipped-n" aria-label="Get help on which URL is right for you.">
+      <span class="octicon octicon-question"></span>
+    </a>
+  </div>
+
+              <a href="/arjanfrans/node-loggert/archive/master.zip"
+                 class="btn btn-sm sidebar-button"
+                 aria-label="Download the contents of arjanfrans/node-loggert as a zip file"
+                 title="Download the contents of arjanfrans/node-loggert as a zip file"
+                 rel="nofollow">
+                <span class="octicon octicon-cloud-download"></span>
+                Download ZIP
+              </a>
+            </div>
+        </div>
+        <div id="js-repo-pjax-container" class="repository-content context-loader-container" data-pjax-container>
+
+          
+<a href="/arjanfrans/node-loggert/blame/02cfbae56d0a00369ddc4251a13019f41f4c76bc/LICENSE" class="hidden js-permalink-shortcut" data-hotkey="y">Permalink</a>
+
+<div class="breadcrumb css-truncate blame-breadcrumb js-zeroclipboard-container">
+  <span class="css-truncate-target js-zeroclipboard-target"><span class="repo-root js-repo-root"><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/arjanfrans/node-loggert" class="" data-branch="master" data-pjax="true" itemscope="url"><span itemprop="title">node-loggert</span></a></span></span><span class="separator">/</span><strong class="final-path">LICENSE</strong></span>
+  <button aria-label="Copy file path to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span class="octicon octicon-clippy"></span></button>
+</div>
+
+<div class="line-age-legend">
+  <span>Newer</span>
+  <ol>
+      <li class="heat" data-heat="1"></li>
+      <li class="heat" data-heat="2"></li>
+      <li class="heat" data-heat="3"></li>
+      <li class="heat" data-heat="4"></li>
+      <li class="heat" data-heat="5"></li>
+      <li class="heat" data-heat="6"></li>
+      <li class="heat" data-heat="7"></li>
+      <li class="heat" data-heat="8"></li>
+      <li class="heat" data-heat="9"></li>
+      <li class="heat" data-heat="10"></li>
+  </ol>
+  <span>Older</span>
+</div>
+
+<div class="file">
+  <div class="file-header">
+    <div class="file-actions">
+      <div class="btn-group">
+        <a href="/arjanfrans/node-loggert/raw/master/LICENSE" class="btn btn-sm" id="raw-url">Raw</a>
+        <a href="/arjanfrans/node-loggert/blob/master/LICENSE" class="btn btn-sm js-update-url-with-hash">Normal view</a>
+        <a href="/arjanfrans/node-loggert/commits/master/LICENSE" class="btn btn-sm" rel="nofollow">History</a>
+      </div>
+    </div>
+
+
+
+    <div class="file-info">
+      <span class="octicon octicon-file-text"></span>
+      <span class="file-mode" title="File Mode">100644</span>
+      <span class="file-info-divider"></span>
+        23 lines (17 sloc)
+        <span class="file-info-divider"></span>
+      1.079 kB
+    </div>
+  </div>
+
+  <div class="blob-wrapper">
+    <table class="blame-container highlight data js-file-line-container">
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="23">
+            <a href="/arjanfrans/node-loggert/commit/1c5f7c1d3af890137838d2687fd4d46adfceb3cf" class="blame-sha">1c5f7c1</a>
+            <img alt="@arjanfrans" class="avatar blame-commit-avatar" height="32" src="https://avatars2.githubusercontent.com/u/3588470?v=3&amp;s=64" width="32" />
+            <a href="/arjanfrans/node-loggert/commit/1c5f7c1d3af890137838d2687fd4d46adfceb3cf" class="blame-commit-title" title="initial commit">initial commit</a>
+            <div class="blame-commit-meta">
+              <a href="/arjanfrans" class="muted-link" rel="author">arjanfrans</a> authored
+              <time datetime="2015-08-28T18:03:47Z" is="relative-time">Aug 28, 2015</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L1">1</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC1">The MIT License (MIT)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L2">2</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC2"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L3">3</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC3">Copyright (c) 2015 Arjan Frans</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L4">4</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC4"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L5">5</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC5">Permission is hereby granted, free of charge, to any person obtaining a copy</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L6">6</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC6">of this software and associated documentation files (the &quot;Software&quot;), to deal</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L7">7</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC7">in the Software without restriction, including without limitation the rights</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L8">8</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC8">to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L9">9</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC9">copies of the Software, and to permit persons to whom the Software is</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L10">10</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC10">furnished to do so, subject to the following conditions:</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L11">11</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC11"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L12">12</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC12">The above copyright notice and this permission notice shall be included in all</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L13">13</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC13">copies or substantial portions of the Software.</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L14">14</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC14"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L15">15</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC15">THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L16">16</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC16">IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L17">17</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC17">FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L18">18</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC18">AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L19">19</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC19">LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L20">20</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC20">OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L21">21</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC21">SOFTWARE.</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat" data-heat="10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L22">22</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC22"></td>
+          </tr>
+    </table>
+  </div>
+</div>
+
+
+        </div>
+      </div>
+      <div class="modal-backdrop"></div>
+    </div>
+  </div>
+
+
+
+      <div class="container">
+  <div class="site-footer" role="contentinfo">
+    <ul class="site-footer-links right">
+        <li><a href="https://status.github.com/" data-ga-click="Footer, go to status, text:status">Status</a></li>
+      <li><a href="https://developer.github.com" data-ga-click="Footer, go to api, text:api">API</a></li>
+      <li><a href="https://training.github.com" data-ga-click="Footer, go to training, text:training">Training</a></li>
+      <li><a href="https://shop.github.com" data-ga-click="Footer, go to shop, text:shop">Shop</a></li>
+        <li><a href="https://github.com/blog" data-ga-click="Footer, go to blog, text:blog">Blog</a></li>
+        <li><a href="https://github.com/about" data-ga-click="Footer, go to about, text:about">About</a></li>
+        <li><a href="https://github.com/pricing" data-ga-click="Footer, go to pricing, text:pricing">Pricing</a></li>
+
+    </ul>
+
+    <a href="https://github.com" aria-label="Homepage">
+      <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+</a>
+    <ul class="site-footer-links">
+      <li>&copy; 2015 <span title="0.09014s from github-fe122-cp1-prd.iad.github.net">GitHub</span>, Inc.</li>
+        <li><a href="https://github.com/site/terms" data-ga-click="Footer, go to terms, text:terms">Terms</a></li>
+        <li><a href="https://github.com/site/privacy" data-ga-click="Footer, go to privacy, text:privacy">Privacy</a></li>
+        <li><a href="https://github.com/security" data-ga-click="Footer, go to security, text:security">Security</a></li>
+        <li><a href="https://github.com/contact" data-ga-click="Footer, go to contact, text:contact">Contact</a></li>
+        <li><a href="https://help.github.com" data-ga-click="Footer, go to help, text:help">Help</a></li>
+    </ul>
+  </div>
+</div>
+
+
+
+    
+    
+
+    <div id="ajax-error-message" class="flash flash-error">
+      <span class="octicon octicon-alert"></span>
+      <button type="button" class="flash-close js-flash-close js-ajax-error-dismiss" aria-label="Dismiss error">
+        <span class="octicon octicon-x"></span>
+      </button>
+      Something went wrong with that request. Please try again.
+    </div>
+
+
+      <script crossorigin="anonymous" src="https://assets-cdn.github.com/assets/frameworks-06e65f5639cc52d1aaada53115a54614b60fa90ab446a673e3e1818df167663b.js"></script>
+      <script async="async" crossorigin="anonymous" src="https://assets-cdn.github.com/assets/github-435b0c380a8b91b3f42654ca3dbe8b623eebe6dfa2314a80f961d364de7e3f42.js"></script>
+      
+      
+    <div class="js-stale-session-flash stale-session-flash flash flash-warn flash-banner hidden">
+      <span class="octicon octicon-alert"></span>
+      <span class="signed-in-tab-flash">You signed in with another tab or window. <a href="">Reload</a> to refresh your session.</span>
+      <span class="signed-out-tab-flash">You signed out in another tab or window. <a href="">Reload</a> to refresh your session.</span>
+    </div>
+  </body>
+</html>
+
