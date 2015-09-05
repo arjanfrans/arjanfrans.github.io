@@ -1,6 +1,16 @@
 ---
 layout: default
 ---
+<h1>Posts</h1>
 
-<h1>...</h1>
-<p><span class="fa fa-cogs fa-5x"></span></p>
+<ul>
+{% for post in site.posts %}
+  <li>
+    <span>{{ post.date | date: "%b %-d, %Y" }}</span>
+
+    <h2>
+      <ahref="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+    </h2>
+  </li>
+{% endfor %}
+</ul>

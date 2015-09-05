@@ -1,0 +1,41 @@
+<hr>
+<footer>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <!-- <h2>{{ site.title }}</h2> -->
+            <!--  -->
+            <!-- <ul> -->
+            <!--     <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li> -->
+            <!-- </ul> -->
+        </div>
+
+        <div class="col-md-4">
+            <p>
+                &copy Arjan Frans {{ site.time | date: '%Y' }}
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <p class="text-right">
+                {% if site.github_username %}
+                <a href="https://github.com/{{ site.github_username }}">
+                    <span class="fa fa-github fa-2x"></span>
+                </a>
+                {% endif %}
+
+                {% if site.twitter_username %}
+                <a href="https://twitter.com/{{ site.twitter_username }}">
+                    <span class="fa fa-twitter fa-2x"></span>
+                </a>
+                {% endif %}
+
+                <a href="{{ "/feed.xml" | prepend: site.baseurl }}"><span class="fa fa-rss fa-2x"></span></a>
+            </p>
+            <!-- <p>{{ site.description }}</p> -->
+        </div>
+
+    </div>
+
+</footer>
