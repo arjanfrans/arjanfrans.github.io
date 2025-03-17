@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Rotation Experiment</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; overflow: hidden; }
+        #container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        #letter { font-size: 150px; display: block; transform-origin: center; line-height: 1; }
+        #stats { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Mental Rotation Experiment</h1>
+        <p>Drücke <strong>n</strong> für normales r, <strong>g</strong> für gespiegeltes r</p>
+        <div id="letter">r</div>
+        <div id="stats"></div>
+    </div>
+
+    <script>
+        const rotations = [0, 45, 90, 135, 225, 270, 315];
+        let trials = [];
+        let startTime, currentTrial, allTrials = [];
+        let inputLocked = false;
+        let gameEnded = false;
+
+        function generateTrials() {
+            allTrials = [];
+            for (let rotation of rotations) {
+                allTrials.push({ rotation, mirrored: false });
+                allTrials.push({ rotation, mirrored: true });
+            }
+            allTrials = allTrials.sort(() => Math.random() - 0.5);
+        }
+
+        function showNextTrial() {
+            if (allTrials.length === 0) {
+                showResults();
+                return;
+            }
+            inputLocked = false;
+            currentTrial = allTrials.pop();
+            document.getElementById('letter').style.transform = `rotate(${currentTrial.rotation}deg) scaleX(${currentTrial.mirrored ? -1 : 1})`;
+            startTime = performance.now();
+        }
+
+        function recordResponse(correct) {
+            if (inputLocked || gameEnded) return;
+            inputLocked = true;
+            const reactionTime = performance.now() - startTime;
+            trials.push({ correct, reactionTime });
+            showNextTrial();
+        }
+
+        function showResults() {
+            gameEnded = true;
+            const totalTrials = trials.length;
+            const correctTrials = trials.filter(t => t.correct).length;
+            const avgTime = trials.reduce((sum, t) => sum + t.reactionTime, 0) / totalTrials;
+            document.getElementById('stats').innerHTML = `
+                <h2>Ergebnisse</h2>
+                <p>Durchläufe: ${totalTrials}</p>
+                <p>Genauigkeit: ${(correctTrials / totalTrials * 100).toFixed(2)}%</p>
+                <p>Ø Reaktionszeit: ${avgTime.toFixed(2)} ms</p>
+            `;
+            document.removeEventListener('keydown', handleKeyPress);
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'n') {
+                recordResponse(!currentTrial.mirrored);
+            } else if (event.key === 'g') {
+                recordResponse(currentTrial.mirrored);
+            }
+        }
+
+        document.addEventListener('keydown', handleKeyPress);
+        generateTrials();
+        showNextTrial();
+    </script>
+</body>
+</html>
+
