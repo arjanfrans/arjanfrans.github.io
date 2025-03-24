@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,6 +35,11 @@
             border: 1px solid black;
             padding: 50px 100px;
             background-color: #cccccc;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         #stats {
@@ -60,167 +66,181 @@
         }
     </style>
 </head>
+
 <body>
-<div id="container">
-    <div>
-        <h1>Mental Rotation Experiment</h1>
-        <p>Drücke <strong>n</strong> für normales r, <strong>g</strong> für gespiegeltes R</p>
-    </div>
-    <div>
-        <div id="letter-container" style="display: none;">
-            <div id="letter">R</div>
+    <div id="container">
+        <div>
+            <h1>Mental Rotation Experiment</h1>
+            <p>Drücke <strong>n</strong> für normales r, <strong>g</strong> für gespiegeltes R</p>
+        </div>
+        <div>
+            <div id="letter-container" style="display: none;">
+                <div id="letter">R</div>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <div id="stats"></div>
+            <button id="start-btn">Start</button>
+            <button id="restart-btn" style="display: none;">Neu starten</button>
         </div>
     </div>
 
-    <div style="display: flex; flex-direction: column; justify-content: center;">
-        <div id="stats"></div>
-        <button id="start-btn">Start</button>
-        <button id="restart-btn" style="display: none;">Neu starten</button>
-    </div>
-</div>
+    <script>
+        const rotations = [0, 45, 90, 135, 225, 270, 315];
+        let trials = [], allTrials = [];
+        let startTime, currentTrial, gameEnded = false;
+        let keyAccepted = false; // flag for key press acceptance
+        let currentTrialDone = false;
+        let experimentRunning = false; // global flag to track if the experiment is running
+        const urlParams = new URLSearchParams(window.location.search);
+        const totalTrials = parseInt(urlParams.get("trials")) || 80;
+        const countdownSeconds = parseInt(urlParams.get("count")) || 10;
+        const pauseMilliseconds = parseInt(urlParams.get("pause")) || 400;
+        const letterEl = document.getElementById('letter');
+        const letterContainerEl = document.getElementById('letter-container');
+        const statsEl = document.getElementById('stats');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
 
-<script>
-    const rotations = [0, 45, 90, 135, 225, 270, 315];
-    let trials = [], allTrials = [];
-    let startTime, currentTrial, gameEnded = false;
-    let keyAccepted = false; // flag for key press acceptance
-    let currentTrialDone = false;
-    let experimentRunning = false; // global flag to track if the experiment is running
-    const urlParams = new URLSearchParams(window.location.search);
-    const totalTrials = parseInt(urlParams.get("trials")) || 80;
-    const letterEl = document.getElementById('letter');
-    const letterContainerEl = document.getElementById('letter-container');
-    const statsEl = document.getElementById('stats');
-    const startBtn = document.getElementById('start-btn');
-    const restartBtn = document.getElementById('restart-btn');
-
-    function generateTrials() {
-        allTrials = [];
-        for (let i = 0; i < totalTrials / 2; i++) {
-            let rotation = rotations[Math.floor(Math.random() * rotations.length)];
-            allTrials.push({rotation, mirrored: false});
-            allTrials.push({rotation, mirrored: true});
+        function generateTrials() {
+            allTrials = [];
+            for (let i = 0; i < totalTrials / 2; i++) {
+                let rotation = rotations[Math.floor(Math.random() * rotations.length)];
+                allTrials.push({ rotation, mirrored: false });
+                allTrials.push({ rotation, mirrored: true });
+            }
+            allTrials = allTrials.sort(() => Math.random() - 0.5);
         }
-        allTrials = allTrials.sort(() => Math.random() - 0.5);
-    }
 
-    function startExperiment() {
-        if (experimentRunning) return; // Prevent starting a new experiment while one is running
+        function startExperiment() {
+            if (experimentRunning) return; // Prevent starting a new experiment while one is running
 
-        statsEl.innerHTML = "";
-        startBtn.style.display = 'none';
+            statsEl.innerHTML = "";
+            startBtn.style.display = 'none';
 
-        countdown(3, () => {
-            generateTrials();
+            countdown(countdownSeconds, () => {
+                generateTrials();
 
-            experimentRunning = true;
-            restartBtn.style.display = 'block';
+                experimentRunning = true;
+                restartBtn.style.display = 'block';
 
-            showNextTrial();
-        });
-    }
+                showNextTrial();
+            });
+        }
 
-    function countdown(seconds, callback) {
-        if (seconds > 0) {
-            statsEl.innerHTML = `<span style="color: #222270; font-size: 48px">${seconds}...</span>`;
-            setTimeout(() => countdown(seconds - 1, callback), 1000);
-        } else {
-            statsEl.innerHTML = `<span style="color: #222270; font-size: 48px">Los!</span>`;
+        function countdown(seconds, callback) {
+            if (seconds > 0) {
+                statsEl.innerHTML = `<span style="color: #222270; font-size: 48px">${seconds}...</span>`;
+                setTimeout(() => countdown(seconds - 1, callback), 1000);
+            } else {
+                statsEl.innerHTML = `<span style="color: #222270; font-size: 48px">Los!</span>`;
 
-            setTimeout(() => {
+                setTimeout(() => {
                     statsEl.innerHTML = "";
                     callback()
                 }, 1000
-            );
-        }
-    }
-
-    function showNextTrial() {
-        if (allTrials.length === 0) {
-            showResults();
-            return;
+                );
+            }
         }
 
-        // Reset the keyAccepted flag for each trial
-        keyAccepted = true;
+        function showNextTrial() {
+            if (allTrials.length === 0) {
+                showResults();
+                return;
+            }
 
-        currentTrial = allTrials.shift();
-        console.log("Next Trial:", currentTrial);
+            // Reset the keyAccepted flag for each trial
+            keyAccepted = true;
 
-        letterEl.style.transform = `rotate(${currentTrial.rotation}deg) scaleX(${currentTrial.mirrored ? -1 : 1})`;
-        letterContainerEl.style.display = 'block';
-        startTime = performance.now();
-    }
+            currentTrial = allTrials.shift();
+            console.log("Next Trial:", currentTrial);
 
-    function recordResponse(correct) {
-        if (!keyAccepted || gameEnded) return;
-        keyAccepted = false; // Prevent multiple responses for the same trial
+            letterEl.style.transform = `rotate(${currentTrial.rotation}deg) scaleX(${currentTrial.mirrored ? -1 : 1})`;
+            letterContainerEl.style.display = 'flex';
+            startTime = performance.now();
+        }
 
-        const reactionTime = performance.now() - startTime;
-        trials.push({correct, reactionTime});
-        currentTrialDone = true;
-        showNextTrial();
-    }
+        function recordResponse(correct) {
+            if (!keyAccepted || gameEnded) {
+                return;
+            }
 
-    function showResults() {
-        gameEnded = true;
-        const correctTrials = trials.filter(t => t.correct).length;
-        const avgTime = trials.reduce((sum, t) => sum + t.reactionTime, 0) / trials.length;
+            keyAccepted = false; // Prevent multiple responses for the same trial
 
-        statsEl.innerHTML = `
+            const reactionTime = performance.now() - startTime;
+            trials.push({ correct, reactionTime });
+
+            letterEl.style.display = 'none'; // Hide the letter immediately after the response is recorded
+
+            currentTrialDone = true;
+
+            // Show the next trial immediately
+            setTimeout(() => {
+                letterEl.style.display = 'block'; // Show the letter again before the next trial
+                showNextTrial(); // Proceed to the next trial
+            }, pauseMilliseconds); // Short delay before showing the next trial
+        }
+
+        function showResults() {
+            gameEnded = true;
+            const correctTrials = trials.filter(t => t.correct).length;
+            const avgTime = trials.reduce((sum, t) => sum + t.reactionTime, 0) / trials.length;
+
+            statsEl.innerHTML = `
                 <h2>Ergebnisse</h2>
                 <p>Durchläufe: ${trials.length}</p>
                 <p>Genauigkeit: ${(correctTrials / trials.length * 100).toFixed(2)}%</p>
                 <p>Ø Reaktionszeit: ${avgTime.toFixed(2)} ms</p>
             `;
-        document.removeEventListener('keydown', handleKeyPress);
-    }
-
-    function handleKeyPress(event) {
-        if (!experimentRunning) {
-            return;
+            document.removeEventListener('keydown', handleKeyPress);
         }
 
-        if (currentTrialDone) {
-            return;
+        function handleKeyPress(event) {
+            if (!experimentRunning) {
+                return;
+            }
+
+            if (currentTrialDone) {
+                return;
+            }
+
+            if (!keyAccepted) return;
+
+            if (event.key.toLowerCase() === 'n') {
+                recordResponse(!currentTrial.mirrored);
+            } else if (event.key.toLowerCase() === 'g') {
+                recordResponse(currentTrial.mirrored);
+            }
         }
 
-        if (!keyAccepted) return;
+        document.addEventListener('keyup', () => {
+            if (!experimentRunning) return;
 
-        if (event.key === 'n') {
-            recordResponse(!currentTrial.mirrored);
-        } else if (event.key === 'g') {
-            recordResponse(currentTrial.mirrored);
+            keyAccepted = true
+            currentTrialDone = false;
+        });
+        document.addEventListener('keydown', handleKeyPress);
+        startBtn.addEventListener('click', startExperiment);
+
+        // Restart function to reset everything
+        function restartExperiment() {
+            trials = [];
+            allTrials = [];
+            gameEnded = false;
+            experimentRunning = false; // Reset experiment state
+            keyAccepted = false; // Reset keyAccepted flag
+            currentTrialDone = false;
+            letterContainerEl.style.display = 'none';
+            statsEl.innerHTML = "";
+            restartBtn.style.display = 'none';
+            startBtn.style.display = 'block';
+
+            document.addEventListener('keydown', handleKeyPress); // Reattach key listener
         }
-    }
 
-    document.addEventListener('keyup', () => {
-        if (!experimentRunning) return;
-
-        keyAccepted = true
-        currentTrialDone = false;
-    });
-    document.addEventListener('keydown', handleKeyPress);
-    startBtn.addEventListener('click', startExperiment);
-
-    // Restart function to reset everything
-    function restartExperiment() {
-        trials = [];
-        allTrials = [];
-        gameEnded = false;
-        experimentRunning = false; // Reset experiment state
-        keyAccepted = false; // Reset keyAccepted flag
-        currentTrialDone = false;
-
-        letterContainerEl.style.display = 'none';
-        statsEl.innerHTML = "";
-        restartBtn.style.display = 'none';
-        startBtn.style.display = 'block';
-
-        document.addEventListener('keydown', handleKeyPress); // Reattach key listener
-    }
-
-    restartBtn.addEventListener('click', restartExperiment);
-</script>
+        restartBtn.addEventListener('click', restartExperiment);
+    </script>
 </body>
+
 </html>
