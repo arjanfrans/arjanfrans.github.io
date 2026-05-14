@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phone Frame Generator</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='8' y='1' width='16' height='30' rx='4' fill='%23111'/><rect x='9.5' y='3' width='13' height='24' rx='2.5' fill='%230a84ff'/><rect x='13' y='28' width='6' height='1.5' rx='0.75' fill='%23333'/><rect x='13.5' y='2' width='5' height='1' rx='0.5' fill='%23333'/></svg>">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f0f;
+      --surface: #1a1a1a;
+      --surface2: #252525;
+      --border: #333;
+      --text: #f0f0f0;
+      --muted: #777;
+      --accent: #0a84ff;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── Stage (first on mobile) ── */
+    #stage {
+      order: 1;
+    }
+
+    /* ── Panel (below on mobile) ── */
+    #panel {
+      order: 2;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ── Desktop: side by side ── */
+    @media (min-width: 860px) {
+      body {
+        flex-direction: row;
+        height: 100vh;
+        overflow: hidden;
+      }
+      #panel {
+        order: 1;
+        width: 300px;
+        flex-shrink: 0;
+        border-top: none;
+        border-right: 1px solid var(--border);
+        overflow-y: auto;
+        height: 100vh;
+      }
+      #stage {
+        order: 2;
+        flex: 1;
+        height: 100vh;
+        overflow: hidden;
+      }
+    }
+
+    #panel h1 {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+    #panel h1 small {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .section { display: flex; flex-direction: column; gap: 8px; }
+
+    .label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    input[type="url"], input[type="text"] {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 11px 12px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input[type="url"]:focus, input[type="text"]:focus { border-color: var(--accent); }
+
+    .upload-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--muted);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .upload-btn:hover { border-color: var(--accent); color: var(--text); }
+    input[type="file"] { display: none; }
+
+    .or-divider {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+    .or-divider::before, .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .range-row { display: flex; align-items: center; gap: 8px; }
+    input[type="range"] { flex: 1; accent-color: var(--accent); cursor: pointer; }
+    .range-val { font-size: 11px; color: var(--muted); min-width: 34px; text-align: right; }
+
+    .color-row { display: flex; gap: 8px; }
+    .swatch {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .swatch:hover { transform: scale(1.1); }
+    .swatch.active { border-color: var(--accent); }
+    .swatch-black  { background: linear-gradient(145deg, #2c2c2e, #111); }
+    .swatch-white  { background: linear-gradient(145deg, #f5f5f7, #d8d8dc); }
+    .swatch-teal   { background: linear-gradient(145deg, #5ac8c8, #2d8080); }
+    .swatch-pink   { background: linear-gradient(145deg, #f2b8c6, #c8607a); }
+
+    .btn {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn:active { opacity: 0.7; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-ghost   { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+
+    .hr { height: 1px; background: var(--border); }
+
+    .note { font-size: 10px; color: var(--muted); line-height: 1.6; }
+
+    /* ── Stage ── */
+    #stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #080808;
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0);
+      background-size: 28px 28px;
+      padding: 24px 16px;
+    }
+
+    @media (min-width: 860px) {
+      #stage {
+        padding: 0;
+        overflow: hidden;
+      }
+    }
+
+    /* 9:16 story canvas — responsive width */
+    #story {
+      width: min(370px, calc(100vw - 32px));
+      aspect-ratio: 9 / 16;
+      position: relative;
+      overflow: hidden;
+      border-radius: 6px;
+      background: #111;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+
+    #bg-layer {
+      position: absolute;
+      inset: -5%;
+      width: 110%;
+      height: 110%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: filter 0.2s;
+    }
+
+    #vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.55) 100%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    #phone-wrap {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: center center;
+    }
+
+    /* ── iPhone 16 frame ── */
+    :root { --phone-h: 447px; }
+
+    .phone {
+      width: 212px;
+      height: var(--phone-h);
+      position: relative;
+      border-radius: 40px;
+      padding: 5px;
+      flex-shrink: 0;
+      transition: height 0.25s ease, border-radius 0.25s ease;
+    }
+
+    /* Colors — iPhone 16 lineup */
+    .phone.black {
+      background: linear-gradient(160deg, #2a2a2c 0%, #181818 60%, #252527 100%);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.12),
+        0 0 0 2px rgba(0,0,0,0.8),
+        0 32px 80px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.07);
+    }
+    .phone.white {
+      background: linear-gradient(160deg, #f5f5f7 0%, #e2e2e5 60%, #f0f0f2 100%);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.9),
+        0 0 0 2px rgba(0,0,0,0.2),
+        0 32px 80px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+    .phone.teal {
+      background: linear-gradient(160deg, #6ecfcf 0%, #3a9898 60%, #5ababa 100%);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.25),
+        0 0 0 2px rgba(0,0,0,0.4),
+        0 32px 80px rgba(0,0,0,0.7),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .phone.pink {
+      background: linear-gradient(160deg, #f2b8c6 0%, #d4728a 60%, #e8a0b4 100%);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.35),
+        0 0 0 2px rgba(0,0,0,0.3),
+        0 32px 80px rgba(0,0,0,0.65),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    /* iPhone 16 buttons */
+    /* Left side: Action button (top), Vol+, Vol- */
+    .btn-action, .btn-vol-up, .btn-vol-down {
+      position: absolute;
+      left: -3px;
+      width: 3px;
+      border-radius: 2px 0 0 2px;
+    }
+    .btn-action   { top: calc(var(--phone-h) * 0.156);  height: calc(var(--phone-h) * 0.037); }
+    .btn-vol-up   { top: calc(var(--phone-h) * 0.229);  height: calc(var(--phone-h) * 0.101); }
+    .btn-vol-down { top: calc(var(--phone-h) * 0.353);  height: calc(var(--phone-h) * 0.101); }
+
+    /* Right side: Power button (top), Camera Control (lower) */
+    .btn-power, .btn-camera {
+      position: absolute;
+      right: -3px;
+      width: 3px;
+      border-radius: 0 2px 2px 0;
+    }
+    .btn-power  { top: calc(var(--phone-h) * 0.257);  height: calc(var(--phone-h) * 0.142); }
+    .btn-camera { top: calc(var(--phone-h) * 0.546);  height: calc(var(--phone-h) * 0.083); }
+
+    /* Button color per phone variant */
+    .phone.black  .btn-action,
+    .phone.black  .btn-vol-up,
+    .phone.black  .btn-vol-down,
+    .phone.black  .btn-power,
+    .phone.black  .btn-camera  { background: #232325; }
+
+    .phone.white  .btn-action,
+    .phone.white  .btn-vol-up,
+    .phone.white  .btn-vol-down,
+    .phone.white  .btn-power,
+    .phone.white  .btn-camera  { background: #c8c8cc; }
+
+    .phone.teal   .btn-action,
+    .phone.teal   .btn-vol-up,
+    .phone.teal   .btn-vol-down,
+    .phone.teal   .btn-power,
+    .phone.teal   .btn-camera  { background: #2e8080; }
+
+    .phone.pink   .btn-action,
+    .phone.pink   .btn-vol-up,
+    .phone.pink   .btn-vol-down,
+    .phone.pink   .btn-power,
+    .phone.pink   .btn-camera  { background: #c0607a; }
+
+    /* Screen */
+    .screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 38px;
+      overflow: hidden;
+      background: #000;
+      position: relative;
+      transition: border-radius 0.25s ease;
+    }
+
+    /* Screenshot image — hidden until a source is set */
+    #screen-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    /* Subtle glass glare */
+    .screen-glare {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(255,255,255,0.06) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 20;
+      border-radius: inherit;
+    }
+
+
+    /* Home indicator */
+    .home-bar {
+      position: absolute;
+      bottom: 7px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 72px;
+      height: 4px;
+      background: rgba(255,255,255,0.28);
+      border-radius: 2px;
+      z-index: 15;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Preview comes first in DOM for mobile ── -->
+<div id="stage">
+  <div id="story">
+    <div id="bg-layer"></div>
+    <div id="vignette"></div>
+
+    <div id="phone-wrap">
+      <div class="phone black" id="phone">
+        <div class="btn-action"></div>
+        <div class="btn-vol-up"></div>
+        <div class="btn-vol-down"></div>
+        <div class="btn-power"></div>
+        <div class="btn-camera"></div>
+
+        <div class="screen">
+          <img id="screen-img" src="" alt="">
+          <div class="home-bar"></div>
+          <div class="screen-glare"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="panel">
+  <div>
+    <h1>Phone Frame
+      <small>Instagram Story Generator</small>
+    </h1>
+  </div>
+
+  <div class="section">
+    <div class="label">Background Image</div>
+    <label class="upload-btn" for="bg-file">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <polyline points="21 15 16 10 5 21"/>
+      </svg>
+      <span id="bg-file-label">Upload image…</span>
+    </label>
+    <input type="file" id="bg-file" accept="image/*">
+    <div class="or-divider">or</div>
+    <input type="url" id="bg-url" placeholder="https://… (image URL)">
+  </div>
+
+  <div class="section">
+    <div class="label">Background Blur</div>
+    <div class="range-row">
+      <input type="range" id="blur" min="0" max="40" value="0">
+      <span class="range-val" id="blur-val">0px</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="label">Vignette</div>
+    <div class="range-row">
+      <input type="range" id="vig" min="0" max="100" value="0">
+      <span class="range-val" id="vig-val">0%</span>
+    </div>
+  </div>
+
+  <div class="hr"></div>
+
+  <div class="section">
+    <div class="label">Screenshot (phone screen)</div>
+    <label class="upload-btn" for="screen-file">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="3" width="20" height="14" rx="2"/>
+        <line x1="8" y1="21" x2="16" y2="21"/>
+        <line x1="12" y1="17" x2="12" y2="21"/>
+      </svg>
+      <span id="screen-file-label">Upload screenshot…</span>
+    </label>
+    <input type="file" id="screen-file" accept="image/*">
+    <div class="or-divider">or</div>
+    <input type="url" id="screen-url" placeholder="https://… (image URL)">
+  </div>
+
+  <div class="section">
+    <div class="label">Phone Color</div>
+    <div class="color-row">
+      <div class="swatch swatch-black active" data-color="black" title="Black"></div>
+      <div class="swatch swatch-white"        data-color="white" title="White"></div>
+      <div class="swatch swatch-teal"         data-color="teal"  title="Teal"></div>
+      <div class="swatch swatch-pink"         data-color="pink"  title="Pink"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="label">Phone Scale</div>
+    <div class="range-row">
+      <input type="range" id="scale" min="50" max="120" value="100">
+      <span class="range-val" id="scale-val">100%</span>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" id="apply-btn">Apply</button>
+
+  <div class="hr"></div>
+
+  <div class="section">
+    <button class="btn btn-ghost" id="dl-btn">⬇ Download PNG</button>
+    <p class="note">Exports at 3× (1110 × 1974 px) — ready for Instagram Stories.</p>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+        integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+  const bgFile        = document.getElementById('bg-file');
+  const bgUrl         = document.getElementById('bg-url');
+  const bgFileLabel   = document.getElementById('bg-file-label');
+  const screenFile    = document.getElementById('screen-file');
+  const screenUrl     = document.getElementById('screen-url');
+  const screenLabel   = document.getElementById('screen-file-label');
+  const blurSlider    = document.getElementById('blur');
+  const blurVal       = document.getElementById('blur-val');
+  const vigSlider     = document.getElementById('vig');
+  const vigVal        = document.getElementById('vig-val');
+  const scaleSlider   = document.getElementById('scale');
+  const scaleVal      = document.getElementById('scale-val');
+  const applyBtn      = document.getElementById('apply-btn');
+  const dlBtn         = document.getElementById('dl-btn');
+  const bgLayer       = document.getElementById('bg-layer');
+  const vignette      = document.getElementById('vignette');
+  const phoneWrap     = document.getElementById('phone-wrap');
+  const phone         = document.getElementById('phone');
+  const screenImg     = document.getElementById('screen-img');
+
+  let bgData = null;
+  let screenData = null;
+  let baseScale = 1;
+
+  function calcBaseScale() {
+    const story = document.getElementById('story');
+    const storyW = story.offsetWidth;
+    const storyH = story.offsetHeight;
+    const phoneH = phone.offsetHeight || 436;
+    const byW = (storyW * 0.57) / 212;
+    const byH = (storyH * 0.88) / phoneH;
+    baseScale = Math.min(1, byW, byH);
+  }
+
+  function applyPhoneScale() {
+    const user = parseInt(scaleSlider.value) / 100;
+    phoneWrap.style.transform = `scale(${baseScale * user})`;
+  }
+
+  calcBaseScale();
+  applyPhoneScale();
+  window.addEventListener('resize', () => { calcBaseScale(); applyPhoneScale(); });
+
+  /* ── helpers ── */
+  function readFile(file, cb) {
+    const r = new FileReader();
+    r.onload = e => cb(e.target.result);
+    r.readAsDataURL(file);
+  }
+
+  /* ── Background ── */
+  function applyBg() {
+    const src = bgData || bgUrl.value.trim();
+    if (!src) return;
+    bgLayer.style.backgroundImage = `url(${JSON.stringify(src)})`;
+    const b = parseInt(blurSlider.value);
+    bgLayer.style.filter    = b > 0 ? `blur(${b}px)` : '';
+    bgLayer.style.transform = b > 0 ? 'scale(1.08) translate(-3.6%, -3.6%)' : '';
+  }
+
+  bgFile.addEventListener('change', e => {
+    const f = e.target.files[0]; if (!f) return;
+    readFile(f, data => {
+      bgData = data;
+      bgUrl.value = '';
+      bgFileLabel.textContent = f.name;
+      applyBg();
+    });
+  });
+
+  bgUrl.addEventListener('change', () => {
+    if (bgUrl.value.trim()) { bgData = null; bgFileLabel.textContent = 'Upload image…'; }
+    applyBg();
+  });
+
+  blurSlider.addEventListener('input', () => {
+    blurVal.textContent = blurSlider.value + 'px';
+    applyBg();
+  });
+
+  vigSlider.addEventListener('input', () => {
+    vigVal.textContent = vigSlider.value + '%';
+    vignette.style.opacity = vigSlider.value / 100;
+  });
+
+  /* ── Screenshot ── */
+  const PHONE_PAD = 10; // 5px top + 5px bottom
+  const SCREEN_W  = 202; // 212px phone width − 10px padding
+
+  function resizePhoneToImage(naturalW, naturalH) {
+    const screenH  = Math.round(SCREEN_W * naturalH / naturalW);
+    const phoneH   = screenH + PHONE_PAD;
+    const rOuter   = Math.round(Math.min(40, phoneH * 0.091));
+    const rInner   = Math.round(Math.min(36, screenH * 0.087));
+
+    document.documentElement.style.setProperty('--phone-h', phoneH + 'px');
+    document.querySelector('.screen').style.borderRadius = rInner + 'px';
+    phone.style.borderRadius = rOuter + 'px';
+  }
+
+  function applyScreen() {
+    const src = screenData || screenUrl.value.trim();
+    if (!src) return;
+    screenImg.style.display = 'none';
+    screenImg.onload = () => {
+      resizePhoneToImage(screenImg.naturalWidth, screenImg.naturalHeight);
+      screenImg.style.display = 'block';
+      // Recompute scale now that phone height changed
+      calcBaseScale();
+      applyPhoneScale();
+    };
+    screenImg.onerror = () => { screenImg.style.display = 'none'; };
+    screenImg.src = src;
+  }
+
+  screenFile.addEventListener('change', e => {
+    const f = e.target.files[0]; if (!f) return;
+    readFile(f, data => {
+      screenData = data;
+      screenUrl.value = '';
+      screenLabel.textContent = f.name;
+      applyScreen();
+    });
+  });
+
+  screenUrl.addEventListener('change', () => {
+    if (screenUrl.value.trim()) { screenData = null; screenLabel.textContent = 'Upload screenshot…'; }
+    applyScreen();
+  });
+
+  /* ── Scale ── */
+  scaleSlider.addEventListener('input', () => {
+    scaleVal.textContent = scaleSlider.value + '%';
+    applyPhoneScale();
+  });
+
+  /* ── Color ── */
+  document.querySelectorAll('.swatch').forEach(sw => {
+    sw.addEventListener('click', () => {
+      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+      sw.classList.add('active');
+      phone.className = 'phone ' + sw.dataset.color;
+    });
+  });
+
+  /* ── Apply ── */
+  applyBtn.addEventListener('click', () => {
+    applyBg();
+    applyScreen();
+  });
+
+  [bgUrl, screenUrl].forEach(inp =>
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') applyBtn.click(); })
+  );
+
+  /* ── Download ── */
+  dlBtn.addEventListener('click', async () => {
+    dlBtn.textContent = 'Capturing…';
+    dlBtn.disabled = true;
+    try {
+      const canvas = await html2canvas(document.getElementById('story'), {
+        scale: 3,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#000000',
+        logging: false,
+      });
+      const link = document.createElement('a');
+      link.download = 'story.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (err) {
+      console.error(err);
+      alert('Export failed: ' + err.message);
+    } finally {
+      dlBtn.textContent = '⬇ Download PNG';
+      dlBtn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
