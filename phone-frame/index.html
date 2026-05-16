@@ -168,6 +168,8 @@
     .btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-ghost   { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+    .btn-record  { background: #ff3b30; color: #fff; }
+    .btn-stop    { background: #636366; color: #fff; }
 
     .hr { height: 1px; background: var(--border); }
 
@@ -337,8 +339,7 @@
       transition: border-radius 0.25s ease;
     }
 
-    /* Screenshot image — hidden until a source is set */
-    #screen-img {
+    #screen-img, #screen-video {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -357,7 +358,6 @@
       border-radius: inherit;
     }
 
-
     /* Home indicator */
     .home-bar {
       position: absolute;
@@ -370,6 +370,31 @@
       border-radius: 2px;
       z-index: 15;
     }
+
+    /* Recording pulse on stage */
+    #rec-indicator {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: none;
+      align-items: center;
+      gap: 5px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #ff3b30;
+      z-index: 99;
+    }
+    #rec-indicator.visible { display: flex; }
+    #rec-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #ff3b30;
+      animation: rec-blink 1s ease-in-out infinite;
+    }
+    @keyframes rec-blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
   </style>
 </head>
 <body>
@@ -390,12 +415,14 @@
 
         <div class="screen">
           <img id="screen-img" src="" alt="">
+          <video id="screen-video" playsinline muted loop></video>
           <div class="home-bar"></div>
           <div class="screen-glare"></div>
         </div>
       </div>
     </div>
   </div>
+  <div id="rec-indicator"><div id="rec-dot"></div> REC</div>
 </div>
 
 <div id="panel">
@@ -439,16 +466,16 @@
   <div class="hr"></div>
 
   <div class="section">
-    <div class="label">Screenshot (phone screen)</div>
+    <div class="label">Screen Content</div>
     <label class="upload-btn" for="screen-file">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="2" y="3" width="20" height="14" rx="2"/>
         <line x1="8" y1="21" x2="16" y2="21"/>
         <line x1="12" y1="17" x2="12" y2="21"/>
       </svg>
-      <span id="screen-file-label">Upload screenshot…</span>
+      <span id="screen-file-label">Upload image or video…</span>
     </label>
-    <input type="file" id="screen-file" accept="image/*">
+    <input type="file" id="screen-file" accept="image/*,video/*">
     <div class="or-divider">or</div>
     <input type="url" id="screen-url" placeholder="https://… (image URL)">
   </div>
@@ -479,6 +506,11 @@
     <button class="btn btn-ghost" id="dl-btn">⬇ Download PNG</button>
     <p class="note">Exports at 3× (1110 × 1974 px) — ready for Instagram Stories.</p>
   </div>
+
+  <div class="section">
+    <button class="btn btn-record" id="record-btn" disabled>⏺ Record Video</button>
+    <p class="note" id="record-note">Upload a video to the phone screen to enable recording. Exports as WebM at 1080 × 1920.</p>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
@@ -500,15 +532,31 @@
   const scaleVal      = document.getElementById('scale-val');
   const applyBtn      = document.getElementById('apply-btn');
   const dlBtn         = document.getElementById('dl-btn');
+  const recordBtn     = document.getElementById('record-btn');
+  const recordNote    = document.getElementById('record-note');
+  const recIndicator  = document.getElementById('rec-indicator');
   const bgLayer       = document.getElementById('bg-layer');
   const vignette      = document.getElementById('vignette');
   const phoneWrap     = document.getElementById('phone-wrap');
   const phone         = document.getElementById('phone');
   const screenImg     = document.getElementById('screen-img');
+  const screenVideo   = document.getElementById('screen-video');
 
   let bgData = null;
   let screenData = null;
   let baseScale = 1;
+  let screenIsVideo = false;
+
+  // Preloaded Image for recording canvas
+  let bgImg = null;
+
+  function loadBgImg(src) {
+    if (!src) { bgImg = null; return; }
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => { bgImg = img; };
+    img.src = src;
+  }
 
   function calcBaseScale() {
     const story = document.getElementById('story');
@@ -544,6 +592,7 @@
     const b = parseInt(blurSlider.value);
     bgLayer.style.filter    = b > 0 ? `blur(${b}px)` : '';
     bgLayer.style.transform = b > 0 ? 'scale(1.08) translate(-3.6%, -3.6%)' : '';
+    loadBgImg(src);
   }
 
   bgFile.addEventListener('change', e => {
@@ -571,11 +620,11 @@
     vignette.style.opacity = vigSlider.value / 100;
   });
 
-  /* ── Screenshot ── */
-  const PHONE_PAD = 10; // 5px top + 5px bottom
-  const SCREEN_W  = 202; // 212px phone width − 10px padding
+  /* ── Screenshot / Video ── */
+  const PHONE_PAD = 10;
+  const SCREEN_W  = 202;
 
-  function resizePhoneToImage(naturalW, naturalH) {
+  function resizePhoneToContent(naturalW, naturalH) {
     const screenH  = Math.round(SCREEN_W * naturalH / naturalW);
     const phoneH   = screenH + PHONE_PAD;
     const rOuter   = Math.round(Math.min(40, phoneH * 0.091));
@@ -589,20 +638,50 @@
   function applyScreen() {
     const src = screenData || screenUrl.value.trim();
     if (!src) return;
-    screenImg.style.display = 'none';
-    screenImg.onload = () => {
-      resizePhoneToImage(screenImg.naturalWidth, screenImg.naturalHeight);
-      screenImg.style.display = 'block';
-      // Recompute scale now that phone height changed
-      calcBaseScale();
-      applyPhoneScale();
-    };
-    screenImg.onerror = () => { screenImg.style.display = 'none'; };
-    screenImg.src = src;
+
+    if (screenIsVideo) {
+      screenImg.style.display = 'none';
+      screenVideo.style.display = 'none';
+      screenVideo.onloadedmetadata = () => {
+        resizePhoneToContent(screenVideo.videoWidth, screenVideo.videoHeight);
+        screenVideo.style.display = 'block';
+        calcBaseScale();
+        applyPhoneScale();
+        enableRecording();
+      };
+      screenVideo.src = src;
+      screenVideo.load();
+      screenVideo.play().catch(() => {});
+    } else {
+      screenVideo.style.display = 'none';
+      screenVideo.src = '';
+      screenImg.style.display = 'none';
+      screenImg.onload = () => {
+        resizePhoneToContent(screenImg.naturalWidth, screenImg.naturalHeight);
+        screenImg.style.display = 'block';
+        calcBaseScale();
+        applyPhoneScale();
+      };
+      screenImg.onerror = () => { screenImg.style.display = 'none'; };
+      screenImg.src = src;
+      disableRecording();
+    }
+  }
+
+  function enableRecording() {
+    recordBtn.disabled = false;
+    const dur = isFinite(screenVideo.duration) ? ` (~${Math.round(screenVideo.duration)}s)` : '';
+    recordNote.textContent = `Records one loop of the video${dur} and exports as WebM at 1080 × 1920.`;
+  }
+
+  function disableRecording() {
+    recordBtn.disabled = true;
+    recordNote.textContent = 'Upload a video to the phone screen to enable recording. Exports as WebM at 1080 × 1920.';
   }
 
   screenFile.addEventListener('change', e => {
     const f = e.target.files[0]; if (!f) return;
+    screenIsVideo = f.type.startsWith('video/');
     readFile(f, data => {
       screenData = data;
       screenUrl.value = '';
@@ -612,7 +691,11 @@
   });
 
   screenUrl.addEventListener('change', () => {
-    if (screenUrl.value.trim()) { screenData = null; screenLabel.textContent = 'Upload screenshot…'; }
+    if (screenUrl.value.trim()) {
+      screenData = null;
+      screenIsVideo = false;
+      screenLabel.textContent = 'Upload image or video…';
+    }
     applyScreen();
   });
 
@@ -641,7 +724,7 @@
     inp.addEventListener('keydown', e => { if (e.key === 'Enter') applyBtn.click(); })
   );
 
-  /* ── Download ── */
+  /* ── Download PNG ── */
   dlBtn.addEventListener('click', async () => {
     dlBtn.textContent = 'Capturing…';
     dlBtn.disabled = true;
@@ -663,6 +746,285 @@
     } finally {
       dlBtn.textContent = '⬇ Download PNG';
       dlBtn.disabled = false;
+    }
+  });
+
+  /* ────────────────────────────────────────────────
+     VIDEO RECORDING
+  ──────────────────────────────────────────────── */
+
+  const REC_W = 1080;
+  const REC_H = 1920;
+
+  const recordCanvas = document.createElement('canvas');
+  recordCanvas.width  = REC_W;
+  recordCanvas.height = REC_H;
+  const rCtx = recordCanvas.getContext('2d');
+
+  let mediaRecorder = null;
+  let recordedChunks = [];
+  let rafId = null;
+  let isRecording = false;
+
+  const PHONE_COLORS = {
+    black: { stops: [['#2a2a2c', 0], ['#181818', 0.6], ['#252527', 1]], btn: '#232325' },
+    white: { stops: [['#f5f5f7', 0], ['#e2e2e5', 0.6], ['#f0f0f2', 1]], btn: '#c8c8cc' },
+    teal:  { stops: [['#6ecfcf', 0], ['#3a9898', 0.6], ['#5ababa', 1]], btn: '#2e8080' },
+    pink:  { stops: [['#f2b8c6', 0], ['#d4728a', 0.6], ['#e8a0b4', 1]], btn: '#c0607a' },
+  };
+
+  function rrect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  function drawRecordFrame() {
+    const W = REC_W;
+    const H = REC_H;
+
+    // Background
+    rCtx.fillStyle = '#111';
+    rCtx.fillRect(0, 0, W, H);
+
+    if (bgImg) {
+      const blurPx = parseInt(blurSlider.value);
+      rCtx.save();
+      if (blurPx > 0) {
+        const scaled = blurPx * (W / 370);
+        rCtx.filter = `blur(${scaled}px)`;
+      }
+      const aspect = bgImg.naturalWidth / bgImg.naturalHeight;
+      const canvasAspect = W / H;
+      let dw, dh, dx, dy;
+      const overshoot = blurPx > 0 ? 0.1 : 0;
+      if (aspect > canvasAspect) {
+        dh = H * (1 + overshoot * 2);
+        dw = dh * aspect;
+      } else {
+        dw = W * (1 + overshoot * 2);
+        dh = dw / aspect;
+      }
+      dx = (W - dw) / 2;
+      dy = (H - dh) / 2;
+      rCtx.drawImage(bgImg, dx, dy, dw, dh);
+      rCtx.filter = 'none';
+      rCtx.restore();
+    }
+
+    // Vignette
+    const vigOpacity = parseInt(vigSlider.value) / 100;
+    if (vigOpacity > 0) {
+      const vg = rCtx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W, H) * 0.7);
+      vg.addColorStop(0.35, 'rgba(0,0,0,0)');
+      vg.addColorStop(1, `rgba(0,0,0,${(vigOpacity * 0.55).toFixed(3)})`);
+      rCtx.fillStyle = vg;
+      rCtx.fillRect(0, 0, W, H);
+    }
+
+    // Determine phone geometry
+    const colorName = phone.className.replace('phone ', '').trim();
+    const colorDef  = PHONE_COLORS[colorName] || PHONE_COLORS.black;
+
+    const vid = screenVideo;
+    const hasVideo = vid && vid.readyState >= 2 && vid.videoWidth;
+    const hasImage = screenImg.naturalWidth > 0;
+
+    let contentW = 0, contentH = 0;
+    if (hasVideo)      { contentW = vid.videoWidth;       contentH = vid.videoHeight; }
+    else if (hasImage) { contentW = screenImg.naturalWidth; contentH = screenImg.naturalHeight; }
+
+    // Phone base dimensions (1x reference = 212px wide)
+    const scaleToCanvas = W / 370; // e.g. 1080/370 ≈ 2.919
+    const phoneBaseW = 212 * scaleToCanvas;
+    const padBase    = 5  * scaleToCanvas;
+
+    let phoneBaseH, screenBaseW, screenBaseH;
+    if (contentW && contentH) {
+      screenBaseW = phoneBaseW - padBase * 2;
+      screenBaseH = screenBaseW * contentH / contentW;
+      phoneBaseH  = screenBaseH + padBase * 2;
+    } else {
+      phoneBaseH  = 447 * scaleToCanvas;
+      screenBaseW = phoneBaseW - padBase * 2;
+      screenBaseH = phoneBaseH - padBase * 2;
+    }
+
+    const userScale  = parseInt(scaleSlider.value) / 100;
+    const byW        = (W * 0.57) / phoneBaseW;
+    const byH        = (H * 0.88) / phoneBaseH;
+    const bScale     = Math.min(1, byW, byH);
+    const totalScale = bScale * userScale;
+
+    const phoneW  = phoneBaseW  * totalScale;
+    const phoneH  = phoneBaseH  * totalScale;
+    const screenW = screenBaseW * totalScale;
+    const screenH = screenBaseH * totalScale;
+    const pad     = padBase     * totalScale;
+    const btnW    = 3 * scaleToCanvas * totalScale;
+
+    const phoneX  = (W - phoneW) / 2;
+    const phoneY  = (H - phoneH) / 2;
+    const screenX = phoneX + pad;
+    const screenY = phoneY + pad;
+
+    const outerR = Math.min(40 * scaleToCanvas * totalScale, phoneH * 0.091);
+    const innerR = Math.min(36 * scaleToCanvas * totalScale, screenH * 0.087);
+
+    // Phone body gradient
+    const g = rCtx.createLinearGradient(phoneX, phoneY, phoneX + phoneW * 0.5, phoneY + phoneH);
+    colorDef.stops.forEach(([c, t]) => g.addColorStop(t, c));
+
+    rrect(rCtx, phoneX, phoneY, phoneW, phoneH, outerR);
+    rCtx.fillStyle = g;
+    rCtx.fill();
+
+    // Outer ring highlight
+    rrect(rCtx, phoneX, phoneY, phoneW, phoneH, outerR);
+    rCtx.strokeStyle = 'rgba(255,255,255,0.12)';
+    rCtx.lineWidth = 1.5;
+    rCtx.stroke();
+
+    // Side buttons
+    rCtx.fillStyle = colorDef.btn;
+    const btnRadius = btnW / 2;
+
+    function drawBtn(bx, by, bw, bh) {
+      rCtx.beginPath();
+      rCtx.rect(bx, by, bw, bh);
+      rCtx.fill();
+    }
+
+    // Left: action, vol+, vol-
+    drawBtn(phoneX - btnW, phoneY + phoneH * 0.156, btnW, phoneH * 0.037);
+    drawBtn(phoneX - btnW, phoneY + phoneH * 0.229, btnW, phoneH * 0.101);
+    drawBtn(phoneX - btnW, phoneY + phoneH * 0.353, btnW, phoneH * 0.101);
+    // Right: power, camera
+    drawBtn(phoneX + phoneW, phoneY + phoneH * 0.257, btnW, phoneH * 0.142);
+    drawBtn(phoneX + phoneW, phoneY + phoneH * 0.546, btnW, phoneH * 0.083);
+
+    // Screen content
+    rCtx.save();
+    rrect(rCtx, screenX, screenY, screenW, screenH, innerR);
+    rCtx.clip();
+
+    rCtx.fillStyle = '#000';
+    rCtx.fillRect(screenX, screenY, screenW, screenH);
+
+    if (hasVideo) {
+      rCtx.drawImage(vid, screenX, screenY, screenW, screenH);
+    } else if (hasImage) {
+      rCtx.drawImage(screenImg, screenX, screenY, screenW, screenH);
+    }
+
+    // Screen glare
+    const gl = rCtx.createLinearGradient(screenX, screenY, screenX + screenW * 0.7, screenY + screenH * 0.45);
+    gl.addColorStop(0, 'rgba(255,255,255,0.06)');
+    gl.addColorStop(1, 'rgba(255,255,255,0)');
+    rCtx.fillStyle = gl;
+    rCtx.fillRect(screenX, screenY, screenW, screenH);
+
+    // Home bar
+    const hbW = 72 * scaleToCanvas * totalScale;
+    const hbH = 4  * scaleToCanvas * totalScale;
+    const hbX = screenX + (screenW - hbW) / 2;
+    const hbY = screenY + screenH - 7 * scaleToCanvas * totalScale - hbH;
+    rCtx.fillStyle = 'rgba(255,255,255,0.28)';
+    rrect(rCtx, hbX, hbY, hbW, hbH, hbH / 2);
+    rCtx.fill();
+
+    rCtx.restore();
+  }
+
+  function startRecording() {
+    recordedChunks = [];
+
+    const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9')
+      ? 'video/webm;codecs=vp9'
+      : 'video/webm';
+
+    const stream = recordCanvas.captureStream(30);
+    mediaRecorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 8_000_000 });
+
+    mediaRecorder.ondataavailable = e => {
+      if (e.data.size > 0) recordedChunks.push(e.data);
+    };
+
+    mediaRecorder.onstop = () => {
+      isRecording = false;
+      cancelAnimationFrame(rafId);
+      rafId = null;
+
+      // Restore video state
+      screenVideo.loop = true;
+      screenVideo.play().catch(() => {});
+
+      recIndicator.classList.remove('visible');
+      recordBtn.textContent = '⏺ Record Video';
+      recordBtn.className = 'btn btn-record';
+      recordBtn.disabled = false;
+
+      const blob = new Blob(recordedChunks, { type: 'video/webm' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.download = 'story.webm';
+      a.href = url;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+    };
+
+    // Play video once (no loop) and auto-stop when it ends
+    screenVideo.loop = false;
+    screenVideo.currentTime = 0;
+    screenVideo.play().catch(() => {});
+
+    const duration = isFinite(screenVideo.duration) ? screenVideo.duration : null;
+    let stopTimeout = null;
+
+    screenVideo.onended = () => {
+      if (isRecording) stopRecording();
+    };
+
+    if (duration) {
+      stopTimeout = setTimeout(() => {
+        if (isRecording) stopRecording();
+      }, (duration + 0.5) * 1000);
+    }
+
+    // Render loop
+    function loop() {
+      drawRecordFrame();
+      rafId = requestAnimationFrame(loop);
+    }
+    loop();
+
+    mediaRecorder.start(100); // collect data every 100ms
+    isRecording = true;
+
+    recIndicator.classList.add('visible');
+    recordBtn.textContent = '⏹ Stop';
+    recordBtn.className = 'btn btn-stop';
+  }
+
+  function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop();
+    }
+  }
+
+  recordBtn.addEventListener('click', () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
     }
   });
 </script>
