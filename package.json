@@ -1,0 +1,8 @@
+{
+    "name": "arjanfrans.github.io",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "start": "node serve.mjs"
+    }
+}
