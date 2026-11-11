@@ -84,28 +84,6 @@
             color: #00ff00;
         }
 
-        .ticker {
-            overflow: hidden;
-            white-space: nowrap;
-            font-family: "Courier New", Courier, monospace;
-            font-weight: bold;
-            color: #ff0000;
-            background: #ffff99;
-            border-bottom: 1px solid #808080;
-            padding: 3px 0;
-        }
-
-        .ticker span {
-            display: inline-block;
-            padding-left: 100%;
-            animation: scroll 22s linear infinite;
-        }
-
-        @keyframes scroll {
-            from { transform: translateX(0); }
-            to { transform: translateX(-100%); }
-        }
-
         #layout {
             display: flex;
             gap: 10px;
@@ -170,44 +148,6 @@
         }
 
         @keyframes blink { 50% { visibility: hidden; } }
-
-        .construction {
-            padding: 6px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 11px;
-            background: repeating-linear-gradient(45deg, #ffcc00 0 10px, #000 10px 20px);
-        }
-
-        .construction span {
-            display: inline-block;
-            padding: 3px 6px;
-            background: #ffcc00;
-            border: 1px solid #000;
-        }
-
-        .badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            justify-content: center;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 88px;
-            height: 31px;
-            font: bold 9px/1.1 Verdana, sans-serif;
-            text-align: center;
-            text-decoration: none;
-            border: 1px solid #000;
-        }
-
-        .badge-html { background: linear-gradient(#ffffff, #ff9900); color: #000; }
-        .badge-notepad { background: linear-gradient(#000080, #0000cc); color: #fff; }
-        .badge-mobile { background: linear-gradient(#003300, #00aa00); color: #ffff00; }
 
         h2.section {
             margin: 0;
@@ -284,7 +224,93 @@
             color: #444;
         }
 
-        .links { margin: 0; }
+        .project .updated {
+            font-size: 11px;
+            font-style: italic;
+            color: #666;
+        }
+
+        .project > div:last-child { flex: 1; }
+
+        .star {
+            display: inline-block;
+            padding: 0 4px;
+            font-family: Verdana, sans-serif;
+            font-size: 9px;
+            font-weight: bold;
+            color: #000;
+            background: #ffff00;
+            border: 1px solid #000;
+            vertical-align: middle;
+        }
+
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .highlight {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            padding: 4px;
+            color: #000;
+            text-decoration: none;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #fff #404040 #404040 #fff;
+        }
+
+        .highlight:visited { color: #000; }
+        .highlight:hover { color: #fff; background: #000080; }
+        .highlight:hover span { color: #fff; }
+
+        .highlight img,
+        .highlight .soon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border: 1px solid #000;
+        }
+
+        .highlight .soon {
+            font-family: "Courier New", Courier, monospace;
+            color: #ffff00;
+            background: #000;
+        }
+
+        .highlight .soon b {
+            font-size: 22px;
+            animation: blink 1s steps(1) infinite;
+        }
+
+        .highlight b { font-family: Georgia, "Times New Roman", Times, serif; font-size: 14px; color: inherit; }
+        .highlight > span:last-child { font-size: 11px; line-height: 1.35; color: #333; }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0 4px;
+            margin: 0;
+        }
+
+        .links .product {
+            margin-left: auto;
+            padding: 1px 6px;
+            font-size: 11px;
+            color: #fff;
+            text-decoration: none;
+            background: #000080;
+            border: 1px solid #000;
+        }
+
+        .links .product:hover { background: #ff0000; color: #fff; }
         .links a { white-space: nowrap; }
 
         .top { text-align: right; font-size: 11px; margin-top: 6px; }
@@ -342,8 +368,6 @@
 
             #nav a { padding: 10px 8px; text-align: center; }
 
-            .sidebar-extra { display: none; }
-
             .project { flex-direction: column; gap: 6px; }
 
             .project .shot { flex: none; width: 100%; max-width: 400px; }
@@ -352,8 +376,7 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .ticker span, .new, .project .soon b { animation: none; }
-            .ticker span { padding-left: 8px; }
+            .new, .project .soon b, .highlight .soon b { animation: none; }
         }
     </style>
 </head>
@@ -369,38 +392,18 @@
         <p>&gt; Welcome to my homepage on the World Wide Web!_</p>
     </div>
 
-    <div class="ticker" aria-hidden="true">
-        <span>*** Welcome visitor! *** Check out my games, tools and other stuff! *** Best viewed with any browser, even on your phone! ***</span>
-    </div>
-
     <div id="layout">
         <div id="sidebar">
             <div class="panel" id="nav">
                 <div class="titlebar"><span>Navigation</span></div>
                 <div class="panel-body">
                     <ul>
+                        <li><a href="#highlights">&raquo; Highlights</a></li>
                         <li><a href="#games">&raquo; Games</a></li>
                         <li><a href="#tools">&raquo; Tools</a></li>
                         <li><a href="#misc">&raquo; Misc.</a></li>
-                        <li><a href="https://github.com/arjanfrans">&raquo; GitHub</a></li>
-                        <li><a href="https://github.com/hardbulls">&raquo; Hard Bulls</a></li>
-                        <li><a href="https://www.club-stack.com">&raquo; ClubStack</a></li>
+                        <li><a href="https://github.com/arjanfrans" target="_blank" rel="noopener">&raquo; GitHub</a></li>
                     </ul>
-                </div>
-            </div>
-
-            <div class="sidebar-extra">
-                <div class="panel">
-                    <div class="construction"><span>UNDER CONSTRUCTION</span></div>
-                </div>
-
-                <div class="panel">
-                    <div class="titlebar"><span>Links</span></div>
-                    <div class="panel-body badges">
-                        <a class="badge badge-html" href="https://github.com/arjanfrans/arjanfrans.github.io">VIEW<br>SOURCE</a>
-                        <span class="badge badge-notepad">MADE WITH<br>NOTEPAD</span>
-                        <span class="badge badge-mobile">MOBILE<br>FRIENDLY!</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -412,7 +415,36 @@
                     <div class="sunken">
                         <p>Hi! My name is <b>Arjan Frans</b> and this is my little corner of the internet.</p>
                         <p>Here you can find some of the things I have built over the years: games, handy tools and other random stuff. Click on a screenshot to try it out!</p>
-                        <p>I also build <a href="https://www.club-stack.com">ClubStack</a>, digital products for sports clubs, and open source software for the <a href="https://www.hardbulls.com">Hard Bulls Baseball Club</a> (<a href="https://github.com/hardbulls">@hardbulls</a> on GitHub).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel" id="highlights">
+                <div class="titlebar"><h2 class="section">&#9733; Highlights &#9733;</h2></div>
+                <div class="panel-body">
+                    <div class="sunken">
+                        <div class="highlights">
+                            <a class="highlight" href="#tycoon">
+                                <span class="soon"><b>SOON</b></span>
+                                <b>Baseball Club Tycoon</b>
+                                <span>Build and manage your own baseball club. Coming soon!</span>
+                            </a>
+                            <a class="highlight" href="#replay">
+                                <img src="img/hardbulls-replay.jpg" alt="" width="400" height="300" loading="lazy">
+                                <b>Play-by-Play Replay</b>
+                                <span>Real baseball games replayed on a pixel-art ballpark.</span>
+                            </a>
+                            <a class="highlight" href="#club-apps">
+                                <img src="img/clubstack-apps.jpg" alt="" width="400" height="300" loading="lazy">
+                                <b>Club &amp; Fan Apps</b>
+                                <span>Club and fan apps for the Hard Bulls, MLB and NHL.</span>
+                            </a>
+                            <a class="highlight" href="#web-components">
+                                <img src="img/web-components.jpg" alt="" width="400" height="300" loading="lazy">
+                                <b>Web Components UI</b>
+                                <span>Reusable UI web components with theming and dark mode.</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -423,71 +455,89 @@
                 <div class="titlebar"><h2 class="section">Games</h2></div>
                 <div class="panel-body">
                     <div class="sunken">
-                        <div class="project">
+                        <div class="project" id="tycoon">
                             <div class="shot"><div class="soon" role="img" aria-label="Coming soon"><b>COMING SOON</b>&#9918; under development &#9918;</div></div>
                             <div>
-                                <h3>Baseball Club Tycoon <span class="new">UPCOMING!</span></h3>
+                                <h3>Baseball Club Tycoon <span class="new">UPCOMING!</span> <span class="star">&#9733; HIGHLIGHT</span></h3>
                                 <p>Build and manage your own baseball club. Currently in development (working title).</p>
+                                <p class="updated">Last updated: November 2026</p>
+                            </div>
+                        </div>
+
+                        <div class="project" id="replay">
+                            <a class="shot" href="https://app.hardbulls.com/replay?external-game-id=184566&amp;game-id=e051020e917d2b4777247da022a2f980&amp;league=bbl" target="_blank" rel="noopener"><img src="img/hardbulls-replay.jpg" alt="Play-by-play replay on a pixel-art ballpark" width="400" height="300" loading="lazy"></a>
+                            <div>
+                                <h3>Play-by-Play Replay <span class="new">NEW!</span> <span class="star">&#9733; HIGHLIGHT</span></h3>
+                                <p>A game hidden in the Hard Bulls club app. It replays a real baseball game play by play on a pixel-art ballpark, with the real lineups. Works live during games too.</p>
+                                <p class="tech">TypeScript / Canvas</p>
+                                <p class="updated">Last updated: November 2026</p>
+                                <p class="links"><a href="https://app.hardbulls.com/replay?external-game-id=184566&amp;game-id=e051020e917d2b4777247da022a2f980&amp;league=bbl" target="_blank" rel="noopener">[Watch a replay]</a> <a class="product" href="https://www.club-stack.com" target="_blank" rel="noopener">a ClubStack product</a></p>
                             </div>
                         </div>
 
                         <div class="project">
-                            <a class="shot" href="https://static.hardbulls.com/game/"><img src="img/baseball-minigame.jpg" alt="Baseball minigame field" width="400" height="300" loading="lazy"></a>
+                            <a class="shot" href="https://static.hardbulls.com/game/" target="_blank" rel="noopener"><img src="img/baseball-minigame.jpg" alt="Baseball minigame field" width="400" height="300" loading="lazy"></a>
                             <div>
                                 <h3>Baseball Minigame</h3>
-                                <p>A small pixel-art batting minigame made for the Hard Bulls Baseball Club.</p>
+                                <p>Hidden mini game on the Hard Bulls club website.</p>
                                 <p class="tech">TypeScript</p>
-                                <p class="links"><a href="https://static.hardbulls.com/game/">[Play]</a> <a href="https://github.com/hardbulls/game">[Source]</a></p>
+                                <p class="updated">Last updated: September 2024</p>
+                                <p class="links"><a href="https://static.hardbulls.com/game/" target="_blank" rel="noopener">[Play]</a> <a href="https://github.com/hardbulls/game" target="_blank" rel="noopener">[Source]</a></p>
                             </div>
                         </div>
 
                         <div class="project">
-                            <a class="shot" href="http://grand-theft-duty.arjanfrans.com/"><img src="img/grand-theft-duty.jpg" alt="Grand Theft Duty main menu" width="400" height="300" loading="lazy"></a>
+                            <a class="shot" href="http://grand-theft-duty.arjanfrans.com/" target="_blank" rel="noopener"><img src="img/grand-theft-duty.jpg" alt="Grand Theft Duty main menu" width="400" height="300" loading="lazy"></a>
                             <div>
                                 <h3>Grand Theft Duty</h3>
-                                <p>Top-down shooter in the browser, built with <a href="https://threejs.org/">three.js</a>.</p>
+                                <p>Top-down shooter in the browser, built with <a href="https://threejs.org/" target="_blank" rel="noopener">three.js</a>.</p>
                                 <p class="tech">JavaScript / three.js / WebGL</p>
-                                <p class="links"><a href="http://grand-theft-duty.arjanfrans.com/">[Play]</a> <a href="https://github.com/arjanfrans/grand-theft-duty">[Source]</a></p>
+                                <p class="updated">Last updated: August 2021</p>
+                                <p class="links"><a href="http://grand-theft-duty.arjanfrans.com/" target="_blank" rel="noopener">[Play]</a> <a href="https://github.com/arjanfrans/grand-theft-duty" target="_blank" rel="noopener">[Source]</a></p>
                             </div>
                         </div>
 
                         <div class="project">
-                            <a class="shot" href="http://conquete.arjanfrans.com"><img src="img/conquete.jpg" alt="Conquete world map board" width="400" height="300" loading="lazy"></a>
+                            <a class="shot" href="http://conquete.arjanfrans.com" target="_blank" rel="noopener"><img src="img/conquete.jpg" alt="Conquete world map board" width="400" height="300" loading="lazy"></a>
                             <div>
                                 <h3>Conqu&ecirc;te</h3>
                                 <p>JavaScript library with the game logic for the Risk board game, plus an unfinished demo with a user interface.</p>
                                 <p class="tech">JavaScript / React</p>
-                                <p class="links"><a href="http://conquete.arjanfrans.com">[Demo]</a> <a href="https://github.com/arjanfrans/conquete">[Source]</a></p>
+                                <p class="updated">Last updated: October 2016</p>
+                                <p class="links"><a href="http://conquete.arjanfrans.com" target="_blank" rel="noopener">[Demo]</a> <a href="https://github.com/arjanfrans/conquete" target="_blank" rel="noopener">[Source]</a></p>
                             </div>
                         </div>
 
                         <div class="project">
-                            <a class="shot" href="http://realtime-multiplayer.arjanfrans.com"><img src="img/realtime-multiplayer.jpg" alt="Realtime multiplayer login screen" width="400" height="300" loading="lazy"></a>
+                            <a class="shot" href="http://realtime-multiplayer.arjanfrans.com" target="_blank" rel="noopener"><img src="img/realtime-multiplayer.jpg" alt="Realtime multiplayer login screen" width="400" height="300" loading="lazy"></a>
                             <div>
                                 <h3>Realtime Multiplayer</h3>
-                                <p>Demonstration of realtime multiplayer in the browser, forked from <a href="https://github.com/underscorediscovery/realtime-multiplayer-in-html5">this project</a>.</p>
+                                <p>Demonstration of realtime multiplayer in the browser, forked from <a href="https://github.com/underscorediscovery/realtime-multiplayer-in-html5" target="_blank" rel="noopener">this project</a>.</p>
                                 <p class="tech">JavaScript / Node.js / socket.io</p>
-                                <p class="links"><a href="http://realtime-multiplayer.arjanfrans.com">[Demo]</a> <a href="https://github.com/arjanfrans/realtime-multiplayer-in-html5">[Source]</a></p>
+                                <p class="updated">Last updated: July 2016</p>
+                                <p class="links"><a href="http://realtime-multiplayer.arjanfrans.com" target="_blank" rel="noopener">[Demo]</a> <a href="https://github.com/arjanfrans/realtime-multiplayer-in-html5" target="_blank" rel="noopener">[Source]</a></p>
                             </div>
                         </div>
 
                         <div class="project">
-                            <a class="shot" href="https://github.com/arjanfrans/running-for-hope"><img src="img/running-for-hope.jpg" alt="Running For Hope gameplay" width="400" height="300" loading="lazy"></a>
+                            <a class="shot" href="https://github.com/arjanfrans/running-for-hope" target="_blank" rel="noopener"><img src="img/running-for-hope.jpg" alt="Running For Hope gameplay" width="400" height="300" loading="lazy"></a>
                             <div>
                                 <h3>Running For Hope</h3>
                                 <p>A serious game developed with a group of international students during the 'Game On' minor at the Hanze University of Applied Sciences, Groningen.</p>
                                 <p class="tech">ActionScript / Flash</p>
-                                <p class="links"><a href="https://github.com/arjanfrans/running-for-hope">[Source]</a></p>
+                                <p class="updated">Last updated: September 2015</p>
+                                <p class="links"><a href="https://github.com/arjanfrans/running-for-hope" target="_blank" rel="noopener">[Source]</a></p>
                             </div>
                         </div>
 
                         <div class="project">
-                            <a class="shot" href="https://github.com/arjanfrans/mario-game"><img src="img/mario.jpg" alt="Super Mario Bros. clone gameplay" width="400" height="300" loading="lazy"></a>
+                            <a class="shot" href="https://github.com/arjanfrans/mario-game" target="_blank" rel="noopener"><img src="img/mario.jpg" alt="Super Mario Bros. clone gameplay" width="400" height="300" loading="lazy"></a>
                             <div>
                                 <h3>Super Mario Bros. Clone</h3>
                                 <p>A simple clone of Super Mario Bros., the 16-bit version.</p>
                                 <p class="tech">Java / libGDX</p>
-                                <p class="links"><a href="https://www.youtube.com/watch?v=GxyUYAL4O7I">[Video]</a> <a href="https://github.com/arjanfrans/mario-game">[Source]</a></p>
+                                <p class="updated">Last updated: November 2016</p>
+                                <p class="links"><a href="https://www.youtube.com/watch?v=GxyUYAL4O7I" target="_blank" rel="noopener">[Video]</a> <a href="https://github.com/arjanfrans/mario-game" target="_blank" rel="noopener">[Source]</a></p>
                             </div>
                         </div>
                     </div>
@@ -499,13 +549,36 @@
                 <div class="titlebar"><h2 class="section">Tools</h2></div>
                 <div class="panel-body">
                     <div class="sunken">
-                        <div class="project">
-                            <a class="shot" href="https://www.club-stack.com"><img src="img/clubstack.jpg" alt="ClubStack website" width="400" height="300" loading="lazy"></a>
+                        <div class="project" id="club-apps">
+                            <a class="shot" href="https://app.hardbulls.com" target="_blank" rel="noopener"><img src="img/clubstack-apps.jpg" alt="Hard Bulls, MLB and NHL fan apps side by side" width="400" height="300" loading="lazy"></a>
                             <div>
-                                <h3>ClubStack</h3>
-                                <p>Digital products for sports clubs and teams: a club app without an app store (schedules, results, push notifications), digital membership cards with QR codes, and livestream overlays.</p>
+                                <h3>Club &amp; Fan Apps <span class="star">&#9733; HIGHLIGHT</span></h3>
+                                <p>Apps for sports fans that work without an app store: schedules, live scores and push notifications. There is the Hard Bulls club app, plus fan apps for the NHL and the MLB.</p>
                                 <p class="tech">TypeScript / PWA</p>
-                                <p class="links"><a href="https://www.club-stack.com">[Website]</a></p>
+                                <p class="updated">Last updated: November 2026</p>
+                                <p class="links"><a href="https://app.hardbulls.com" target="_blank" rel="noopener">[Hard Bulls]</a> <a href="https://mlb.club-stack.com" target="_blank" rel="noopener">[MLB]</a> <a href="https://nhl.club-stack.com" target="_blank" rel="noopener">[NHL]</a> <a class="product" href="https://www.club-stack.com" target="_blank" rel="noopener">a ClubStack product</a></p>
+                            </div>
+                        </div>
+
+                        <div class="project">
+                            <a class="shot" href="https://mlb.club-stack.com/overlay.html" target="_blank" rel="noopener"><img src="img/livestream-overlay.jpg" alt="Scoreboard overlay above its live controls" width="400" height="300" loading="lazy"></a>
+                            <div>
+                                <h3>Livestream Overlay</h3>
+                                <p>Scoreboard overlay for baseball livestreams, for example in OBS. Keep score by hand with the live controls on a phone or tablet, or let it follow the live ticker automatically.</p>
+                                <p class="tech">TypeScript / OBS</p>
+                                <p class="updated">Last updated: November 2026</p>
+                                <p class="links"><a href="https://mlb.club-stack.com/overlay.html" target="_blank" rel="noopener">[Overlay]</a> <a href="https://mlb.club-stack.com/scoring.html" target="_blank" rel="noopener">[Controls]</a> <a class="product" href="https://www.club-stack.com" target="_blank" rel="noopener">a ClubStack product</a></p>
+                            </div>
+                        </div>
+
+                        <div class="project">
+                            <a class="shot" href="https://member-cards.club-stack.com/cards/Mitgliedskarte_727e83ebd1517301b2c9dcf4a6f68100.png" target="_blank" rel="noopener"><img src="img/member-cards.jpg" alt="Example membership card with QR code" width="400" height="300" loading="lazy"></a>
+                            <div>
+                                <h3>Membership Cards</h3>
+                                <p>Digital membership cards for clubs. Every member gets a personal card by email, with a QR code that opens a check page, so a membership can be verified at the door.</p>
+                                <p class="tech">TypeScript / Node.js</p>
+                                <p class="updated">Last updated: September 2026</p>
+                                <p class="links"><a href="https://member-cards.club-stack.com/cards/Mitgliedskarte_727e83ebd1517301b2c9dcf4a6f68100.png" target="_blank" rel="noopener">[Example card]</a> <a class="product" href="https://www.club-stack.com" target="_blank" rel="noopener">a ClubStack product</a></p>
                             </div>
                         </div>
 
@@ -515,57 +588,52 @@
                                 <h3>Phone Frame <span class="new">NEW!</span></h3>
                                 <p>Put an image or video inside a phone frame on a nice background. Handy for Instagram stories. Can record videos too.</p>
                                 <p class="tech">HTML / JavaScript</p>
+                                <p class="updated">Last updated: May 2026</p>
                                 <p class="links"><a href="phone-frame/">[Open]</a></p>
                             </div>
                         </div>
 
                         <div class="project">
-                            <a class="shot" href="https://hardbulls.github.io/baseball-scoreboard/"><img src="img/baseball-scoreboard.jpg" alt="Baseball Scoreboard overlay" width="400" height="300" loading="lazy"></a>
+                            <a class="shot" href="https://hardbulls.github.io/baseball-scoreboard/" target="_blank" rel="noopener"><img src="img/baseball-scoreboard.jpg" alt="Baseball Scoreboard overlay" width="400" height="300" loading="lazy"></a>
                             <div>
                                 <h3>Baseball Scoreboard</h3>
                                 <p>Customizable baseball scoreboard as a web component. Great for live tickers and livestreams.</p>
                                 <p class="tech">TypeScript / Web Components</p>
-                                <p class="links"><a href="https://hardbulls.github.io/baseball-scoreboard/">[Demo]</a> <a href="https://github.com/hardbulls/baseball-scoreboard">[Source]</a></p>
+                                <p class="updated">Last updated: July 2024</p>
+                                <p class="links"><a href="https://hardbulls.github.io/baseball-scoreboard/" target="_blank" rel="noopener">[Demo]</a> <a href="https://github.com/hardbulls/baseball-scoreboard" target="_blank" rel="noopener">[Source]</a></p>
                             </div>
                         </div>
 
                         <div class="project">
-                            <a class="shot" href="https://gameday.hardbulls.com/"><img src="img/gameday.jpg" alt="Game Day image generator" width="400" height="300" loading="lazy"></a>
-                            <div>
-                                <h3>Game Day Graphics</h3>
-                                <p>Generates game day images for social media for the Hard Bulls Baseball Club.</p>
-                                <p class="tech">TypeScript</p>
-                                <p class="links"><a href="https://gameday.hardbulls.com/">[Open]</a> <a href="https://github.com/hardbulls/gameday">[Source]</a></p>
-                            </div>
-                        </div>
-
-                        <div class="project">
-                            <a class="shot" href="https://web-drum-machine.arjanfrans.com"><img src="img/web-drum-machine.jpg" alt="Web Drum Machine step sequencer" width="400" height="300" loading="lazy"></a>
+                            <a class="shot" href="https://web-drum-machine.arjanfrans.com" target="_blank" rel="noopener"><img src="img/web-drum-machine.jpg" alt="Web Drum Machine step sequencer" width="400" height="300" loading="lazy"></a>
                             <div>
                                 <h3>Web Drum Machine</h3>
                                 <p>A drum machine in your browser, with a step sequencer, mixer and effects.</p>
                                 <p class="tech">TypeScript / Web Audio</p>
-                                <p class="links"><a href="https://web-drum-machine.arjanfrans.com">[Open]</a> <a href="https://github.com/arjanfrans/web-drum-machine">[Source]</a></p>
+                                <p class="updated">Last updated: December 2020</p>
+                                <p class="links"><a href="https://web-drum-machine.arjanfrans.com" target="_blank" rel="noopener">[Open]</a> <a href="https://github.com/arjanfrans/web-drum-machine" target="_blank" rel="noopener">[Source]</a></p>
                             </div>
                         </div>
 
                         <div class="project">
-                            <a class="shot" href="https://chromewebstore.google.com/detail/environment-warning/coplemcefcojahbbpbbfbpmchlnclngk"><img src="img/environment-warning.jpg" alt="Environment Warning extension icon" width="400" height="300" loading="lazy"></a>
+                            <a class="shot" href="https://chromewebstore.google.com/detail/environment-warning/coplemcefcojahbbpbbfbpmchlnclngk" target="_blank" rel="noopener"><img src="img/environment-warning.jpg" alt="Environment Warning extension icon" width="400" height="300" loading="lazy"></a>
                             <div>
                                 <h3>Environment Warning</h3>
                                 <p>Browser extension that warns you which environment you are on, so you don't break production by accident.</p>
                                 <p class="tech">TypeScript / Browser Extension</p>
-                                <p class="links"><a href="https://chromewebstore.google.com/detail/environment-warning/coplemcefcojahbbpbbfbpmchlnclngk">[Chrome Web Store]</a> <a href="https://github.com/arjanfrans/environment-warning-browser-extension">[Source]</a></p>
+                                <p class="updated">Last updated: November 2024</p>
+                                <p class="links"><a href="https://chromewebstore.google.com/detail/environment-warning/coplemcefcojahbbpbbfbpmchlnclngk" target="_blank" rel="noopener">[Chrome Web Store]</a> <a href="https://addons.mozilla.org/en-US/firefox/addon/environment-warnings/" target="_blank" rel="noopener">[Firefox Add-ons]</a> <a href="https://github.com/arjanfrans/environment-warning-browser-extension" target="_blank" rel="noopener">[Source]</a></p>
                             </div>
                         </div>
 
-                        <div class="project">
-                            <a class="shot" href="https://web-components.arjanfrans.com/"><img src="img/web-components.jpg" alt="Web Components UI demo" width="400" height="300" loading="lazy"></a>
+                        <div class="project" id="web-components">
+                            <a class="shot" href="https://web-components.arjanfrans.com/" target="_blank" rel="noopener"><img src="img/web-components.jpg" alt="Web Components UI demo" width="400" height="300" loading="lazy"></a>
                             <div>
-                                <h3>Web Components UI</h3>
+                                <h3>Web Components UI <span class="star">&#9733; HIGHLIGHT</span></h3>
                                 <p>A collection of reusable UI web components with theming and dark mode.</p>
                                 <p class="tech">TypeScript / Web Components</p>
-                                <p class="links"><a href="https://web-components.arjanfrans.com/">[Demo]</a> <a href="https://github.com/arjanfrans/web-components-ui">[Source]</a></p>
+                                <p class="updated">Last updated: November 2026</p>
+                                <p class="links"><a href="https://web-components.arjanfrans.com/" target="_blank" rel="noopener">[Demo]</a> <a href="https://github.com/arjanfrans/web-components-ui" target="_blank" rel="noopener">[Source]</a></p>
                             </div>
                         </div>
                     </div>
@@ -578,20 +646,13 @@
                 <div class="panel-body">
                     <div class="sunken">
                         <div class="project">
-                            <a class="shot" href="mental-rotation.html"><img src="img/mental-rotation.jpg" alt="Mental Rotation Experiment start screen" width="400" height="300" loading="lazy"></a>
+                            <a class="shot" href="https://github.com/arjanfrans/qr" target="_blank" rel="noopener"><img src="img/qr-tattoo.jpg" alt="QR code tattoo" width="400" height="300" loading="lazy"></a>
                             <div>
-                                <h3>Mental Rotation Experiment</h3>
-                                <p>A small psychology experiment: is the rotated letter normal or mirrored? Measures your reaction time. (In German.)</p>
-                                <p class="tech">HTML / JavaScript</p>
-                                <p class="links"><a href="mental-rotation.html">[Open]</a></p>
-                            </div>
-                        </div>
-
-                        <div class="project">
-                            <div>
-                                <h3>dotfiles</h3>
-                                <p>My development setup.</p>
-                                <p class="links"><a href="https://github.com/arjanfrans/dotfiles">[Source]</a></p>
+                                <h3>QR Code Tattoo</h3>
+                                <p>A QR code tattooed on my skin. It points to a tiny redirect page, so I can change where it leads whenever I want. Scan it and be surprised!</p>
+                                <p class="tech">HTML</p>
+                                <p class="updated">Last updated: May 2026</p>
+                                <p class="links"><a href="https://q.arjanfrans.com/" target="_blank" rel="noopener">[Scan it]</a> <a href="https://github.com/arjanfrans/qr" target="_blank" rel="noopener">[Source]</a></p>
                             </div>
                         </div>
                     </div>
@@ -605,7 +666,7 @@
         <hr class="rainbow">
         <div>You are visitor number</div>
         <div class="counter">000042</div>
-        <p>&copy; 2026 Arjan Frans &middot; <a href="https://github.com/arjanfrans">GitHub</a> &middot; <a href="https://github.com/hardbulls">Hard Bulls</a> &middot; <a href="https://www.club-stack.com">ClubStack</a></p>
+        <p>&copy; 2026 Arjan Frans &middot; <a href="https://github.com/arjanfrans" target="_blank" rel="noopener">GitHub</a></p>
     </div>
 </div>
 </body>
